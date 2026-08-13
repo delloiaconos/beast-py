@@ -2,16 +2,44 @@
 
 A Python framework for battery modelling, state estimation, and parameter estimation, evolved from academic research on Battery Management Systems at the Università degli Studi di Salerno.
 
----
+![BEAST Logo](assets/beast-logo.png)
+
+## What is BEAST?
 
 BEAST is a structured Python implementation of a battery-estimation framework originally developed in MATLAB for the study of lithium-ion battery models and real-time state estimators. 
 The current codebase preserves the model/estimator architecture of the original work while using standard Python and NumPy data structures for numerical computation.
 
-The project originates from my Bachelor's Degree Thesis in Electronic Engineering at the Università degli Studi di Salerno, _Hardware/Software Co-Design di uno stimatore dello stato di batterie agli ioni di litio_ (academic year 2012–2013), and from the battery-modelling research activities I continued in the following years as an Undergraduate Research Fellow at the same university.
+It provides a modular architecture in which battery models and estimation
+algorithms can be developed independently and combined for simulation,
+research, and experimental validation.
+
+The framework is a Python evolution of an earlier MATLAB implementation and
+uses standard Python and NumPy data structures for numerical computation.
+
+## Project Origins
+
+The project originates from my Bachelor's Degree Thesis in Electronic Engineering at the Università degli Studi di Salerno:
+*Hardware/Software Co-Design di uno stimatore dello stato di batterie agli ioni di litio* (academic year 2012–2013). 
+
+The work continued during the following years through undergraduate research
+activities on battery modelling and Battery Management Systems at the same
+university.
 
 The original research investigated battery modelling, State of Charge (SoC) and parameter estimation, MATLAB simulation, C++ implementation, and real-time execution on an FPGA-based Nios II embedded platform. 
-This repository brings that work into a modern, reusable Python package for research, teaching, simulation, and further development.
 
+BEAST brings that work into a modern Python framework intended for research,
+teaching, simulation, and further development.
+
+## Features
+
+- Modular battery-model architecture
+- Interchangeable state-estimation algorithms
+- Parameter-estimation support
+- Equivalent-circuit battery models
+- State of Charge (SoC) estimation
+- NumPy-based numerical implementation
+- Architecture derived from the original MATLAB research framework
+- Extensible interfaces for implementing new models and estimators
 
 ## Contributing
 
@@ -33,19 +61,6 @@ When adding a new model, keep the existing model interface where possible so tha
 
 ## Citation and attribution
 
-This repository originates from academic work carried out at the Università degli Studi di Salerno.
-
-The foundational thesis is:
-```
-    Salvatore Dello Iacono, Hardware/Software Co-Design di uno stimatore dello stato di batterie agli ioni di litio, Bachelor's Degree Thesis in Electronic Engineering, Università degli Studi di Salerno, academic year 2012–2013.
-```
-
-Thesis supervision listed:
-- Prof. Walter Zamboni — supervisor;
-- Prof. Nicola Femia — co-supervisor;
-- Prof. Federico Baronti — co-supervisor.
-
-
 If you use BEAST in academic work, please cite the repository and, when relevant to the algorithms or historical implementation, the original thesis and the scientific literature on which the implemented estimators are based.
 
 ### License
@@ -62,10 +77,25 @@ This software is distributed in the hope that it will be useful, but WITHOUT ANY
 
 For more information about the GNU GPL v3.0, see the [`LICENSE`](LICENSE) file or visit GNU Project website.
 
-### Citation and Academic Use
+### Academic Use
 
 If you use this software, its battery models, estimation algorithms, or results obtained with this framework in a scientific publication, thesis, report, or other academic work, please cite this repository.
 
 If you modify or extend the framework for scientific work, please clearly describe the modifications and cite the original project.
 
 See [`CITATION.cff`](CITATION.cff) for the preferred citation.
+
+
+## Acknowledgements
+
+The original research was conducted at the Università degli Studi di Salerno.
+
+The foundational thesis is:
+```
+    Salvatore Dello Iacono, Hardware/Software Co-Design di uno stimatore dello stato di batterie agli ioni di litio, Bachelor's Degree Thesis in Electronic Engineering, Università degli Studi di Salerno, academic year 2012–2013.
+```
+Bachelor's thesis supervision:
+
+- Prof. Walter Zamboni (Università degli Studi di Salerno)— Supervisor
+- Prof. Nicola Femia (Università degli Studi di Salerno) — Co-supervisor
+- Prof. Federico Baronti (Università di Pisa) — Co-supervisor
