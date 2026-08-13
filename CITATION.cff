@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, its battery models, estimation algorithms,
+  or results obtained with this framework in scientific or academic work,
+  please cite this repository.
+
+title: "BEAST: Battery Estimation Architecture and Simulation Toolkit"
+type: software
+
+authors:
+  - family-names: "Dello Iacono"
+    given-names: "Salvatore"
+    affiliation: "Università degli Studi di Brescia"
+
+abstract: >-
+  BEAST (Battery Estimation Architecture and Simulation Toolkit) is a Python framework
+  for battery modeling and state estimation. The project originates from work
+  developed for a Bachelor's Degree Thesis and subsequent Undergraduate
+  Research activities on battery modeling, state estimation, and embedded
+  Battery Management Systems at the Università degli Studi di Salerno.
+  The current Python implementation evolves earlier MATLAB, C++, and FPGA/Nios II
+  implementations into a structured NumPy-based research software framework.
+
+keywords:
+  - batteries
+  - battery modeling
+  - battery management system
+  - BMS
+  - state of charge
+  - SoC
+  - state of health
+  - SoH
+  - extended Kalman filter
+  - dual EKF
+  - Mix Algorithm
+  - lithium-ion battery
+  - Python
+  - NumPy
+
+license: GPL-3.0-only
+
+version: "0.2.0"
+
+date-released: "2026-08-13"
+
+repository-code: "https://github.com/delloiaconos/beast"
+url: "https://github.com/delloiaconos/beast"
+
+preferred-citation:
+  type: software
+  title: "BEAST: Battery Estimation Architecture and Simulation Toolkit"
+  authors:
+    - family-names: "Dello Iacono"
+      given-names: "Salvatore"
+      affiliation: "Università degli Studi di Brescia"
+  version: "0.2.0"
+  date-released: "2026-08-13"
+  repository-code: "https://github.com/delloiaconos/beast"
+  license: GPL-3.0-only
