@@ -1,610 +1,307 @@
-# Installation Guide
+# BEAST Installation Guide
 
-This document describes how to install and verify **BEAST** for normal use,
-research workflows, testing, documentation, and source development.
+This guide explains how to install **BEAST — Battery Estimation Architecture and Simulation Toolkit** from a source checkout or from locally built distribution artifacts.
 
-> **Python package name:** `beast`  
-> **Distribution name:** `beast-battery-estimation-architecture-simulation-toolkit`  
-> **Required Python version:** Python 3.10 or newer
+BEAST is currently used as a Python library, so installation is verified through Python imports and the public model/estimator selectors.
 
-For information about modifying the source code and contributing to the project,
-see [`DEVELOPMENT.md`](DEVELOPMENT.md).
-
----
-
-## 1. Requirements
+## Requirements
 
 BEAST requires:
 
-- Python **3.10 or newer**
-- `pip`
-- a Python virtual environment is strongly recommended
+- Python 3.10 or newer;
+- `pip`;
+- the runtime dependencies declared in `pyproject.toml`.
 
-The runtime Python dependencies are:
+A virtual environment is strongly recommended.
 
-```text
-numpy>=1.23
-scipy>=1.9
-matplotlib>=3.6
-```
-
-Optional dependencies are:
-
-```text
-pytest>=7    # testing
-pdoc>=14     # API documentation
-```
-
----
-
-## 2. Create a virtual environment
-
-Using a virtual environment keeps BEAST and its dependencies isolated from the
-system Python installation.
-
-### Linux / macOS
-
-From the repository root:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### Windows — PowerShell
-
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-### Windows — Command Prompt
-
-```cmd
-py -m venv .venv
-.venv\Scripts\activate.bat
-```
-
-After activation, verify the Python version:
+Check your Python version:
 
 ```bash
 python --version
 ```
 
-It must report Python 3.10 or newer.
+## Create a virtual environment
 
-Upgrade the packaging tools:
-
-```bash
-python -m pip install --upgrade pip setuptools wheel
-```
-
----
-
-## 3. Recommended installation from the source repository
-
-Clone the repository and enter its root directory:
+### Linux / macOS
 
 ```bash
-git clone https://github.com/delloiaconos/beast-py.git
-cd REPOSITORY
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 ```
 
-Replace the URL above with the actual BEAST repository URL.
+### Windows PowerShell
 
-Install the package:
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+```
+
+### Windows Command Prompt
+
+```bat
+py -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install --upgrade pip
+```
+
+## Install from a source checkout
+
+From the repository root:
 
 ```bash
 python -m pip install .
 ```
 
-This installs BEAST together with its required runtime dependencies.
-
-The Python package can then be imported as:
-
-```python
-import beast
-```
-
----
-
-## 4. Install from a wheel
-
-A wheel is the recommended format for installing a released version without
-working directly from the source tree.
-
-For release `0.2.0`:
+Verify the installation:
 
 ```bash
-python -m pip install dist/beast_battery_estimation_toolkit-0.2.0-py3-none-any.whl
+python -c "import beast; print(beast.__version__)"
 ```
 
-If the wheel is located elsewhere, provide its complete or relative path:
+## Editable installation for development
 
-```bash
-python -m pip install /path/to/beast_battery_estimation_toolkit-0.2.0-py3-none-any.whl
-```
-
-`pip` will automatically install the required NumPy, SciPy, and Matplotlib
-dependencies if they are not already available.
-
----
-
-## 5. Install from the source distribution
-
-A source distribution can also be installed directly:
-
-```bash
-python -m pip install dist/beast_battery_estimation_toolkit-0.2.0.tar.gz
-```
-
-This builds and installs the package locally.
-
----
-
-## 6. Editable installation for development
-
-If you intend to modify BEAST while keeping it installed in the virtual
-environment, use an editable installation:
+If you plan to modify BEAST:
 
 ```bash
 python -m pip install -e .
 ```
 
-Changes made under:
-
-```text
-src/beast/
-```
-
-are then immediately visible to Python without reinstalling the package.
-
-For a development workflow that does **not install BEAST itself**, see
-[`DEVELOPMENT.md`](DEVELOPMENT.md). That workflow runs directly from the
-`src/` tree.
-
----
-
-## 7. Install optional testing support
-
-To install BEAST together with the testing dependencies:
-
-```bash
-python -m pip install ".[test]"
-```
-
-For an editable development installation with testing support:
-
-```bash
-python -m pip install -e ".[test]"
-```
-
-Run the complete test suite with:
-
-```bash
-python -m pytest
-```
-
----
-
-## 8. Install optional documentation support
-
-To install the documentation tool:
-
-```bash
-python -m pip install ".[docs]"
-```
-
-For an editable installation:
-
-```bash
-python -m pip install -e ".[docs]"
-```
-
-Generate the pdoc API documentation with:
-
-```bash
-pdoc beast -o docs/api
-```
-
-The generated documentation will be written under:
-
-```text
-docs/api/
-```
-
----
-
-## 9. Install testing and documentation support together
-
-Both optional dependency groups can be installed at the same time:
-
-```bash
-python -m pip install ".[test,docs]"
-```
-
-For development:
+To include the declared test and documentation dependencies:
 
 ```bash
 python -m pip install -e ".[test,docs]"
 ```
 
----
+See [`DEVELOPMENT.md`](DEVELOPMENT.md) for the contributor workflow.
 
-## 10. Minimal runtime-only environment
+## Optional dependencies
 
-If you only want the packages required to execute the source code, without
-installing BEAST itself, install:
-
-```bash
-python -m pip install \
-    "numpy>=1.23" \
-    "scipy>=1.9" \
-    "matplotlib>=3.6"
-```
-
-Then, from the repository root, make the `src/` directory visible to Python.
-
-### Linux / macOS
+Install testing support only:
 
 ```bash
-export PYTHONPATH="$PWD/src"
+python -m pip install -e ".[test]"
 ```
 
-### Windows — PowerShell
-
-```powershell
-$env:PYTHONPATH="$PWD\src"
-```
-
-You can now run:
+Install documentation support only:
 
 ```bash
-python examples/synthetic_run.py
+python -m pip install -e ".[docs]"
 ```
 
-This approach is especially useful while developing the numerical core. See
-[`DEVELOPMENT.md`](DEVELOPMENT.md) for the complete source-tree workflow.
+The current extras provide `pytest` and `pdoc`, respectively.
 
----
-
-## 11. Verify the installation
-
-### Check the Python import
-
-Run:
+Ruff and the Python build frontend are useful development tools but are not currently part of these extras:
 
 ```bash
-python -c "import beast; print(beast.__file__)"
+python -m pip install ruff build
 ```
 
-Python should print the location from which the package was imported.
+## Verify the package
 
-### Check package metadata
+Check the package version:
 
 ```bash
-python -m pip show beast_battery_estimation_toolkit
+python -c "import beast; print(beast.__version__)"
 ```
 
-The output should include information such as:
+Check a battery-model selector:
+
+```bash
+python -c "from beast import selectCellModel; print(selectCellModel('R0R1C1').__name__)"
+```
+
+Check an estimator selector:
+
+```bash
+python -c "from beast import selectEstimator; print(selectEstimator('EKFDUAL').__name__)"
+```
+
+Check the installed package metadata:
+
+```bash
+python -m pip show beast-battery-estimation-architecture-simulation-toolkit
+```
+
+These checks do not require model datasets or covariance configuration.
+
+## Run the tests
+
+If you installed the test extra from a repository checkout:
+
+```bash
+python -m pytest
+```
+
+Run the command from the project root, where `pyproject.toml` and `tests/` are located.
+
+## Build distribution artifacts
+
+Install the build frontend:
+
+```bash
+python -m pip install build
+```
+
+Then build BEAST:
+
+```bash
+python -m build
+```
+
+The generated wheel and source distribution are written to:
 
 ```text
-Name: beast-battery-estimation-architecture-simulation-toolkit
-Version: 0.2.0
-Requires: matplotlib, numpy, scipy
+dist/
 ```
 
-### Check the command-line interface
+## Install from a wheel
 
-The package defines the `beast` command.
-
-Run:
+Install a locally built wheel with:
 
 ```bash
-beast --help
+python -m pip install dist/*.whl
 ```
 
-or:
-
-```bash
-python -m beast --help
-```
-
-A help message should be displayed.
-
-### Run the synthetic example
-
-From the repository root:
-
-```bash
-python examples/synthetic_run.py
-```
-
-This is a useful first check of the model and estimator stack.
-
----
-
-## 12. Verify with the test suite
-
-If the testing dependencies are installed:
-
-```bash
-python -m pytest
-```
-
-To run a specific test module:
-
-```bash
-python -m pytest tests/test_cell_models.py
-```
-
-To run estimator tests:
-
-```bash
-python -m pytest tests/test_estimators.py
-```
-
-To display more detail:
-
-```bash
-python -m pytest -v
-```
-
----
-
-## 13. Headless systems and CI environments
-
-Matplotlib may require a non-interactive backend on servers, containers, or CI
-systems without a graphical display.
-
-### Linux / macOS
-
-```bash
-export MPLBACKEND=Agg
-```
-
-### Windows — PowerShell
+On Windows PowerShell, you can specify the wheel filename explicitly:
 
 ```powershell
-$env:MPLBACKEND="Agg"
+python -m pip install .\dist\<wheel-file>.whl
 ```
 
-Then execute tests or scripts normally:
+Testing the wheel in a clean virtual environment is recommended before a release.
+
+## Install from a source distribution
+
+Install a locally built source distribution with:
 
 ```bash
-python -m pytest
+python -m pip install dist/*.tar.gz
 ```
 
----
+If your shell does not expand wildcards, provide the exact filename.
 
-## 14. Upgrade an existing installation
+## Upgrade
 
-When installing a newer wheel:
-
-```bash
-python -m pip install --upgrade path/to/new-wheel.whl
-```
-
-When installing from an updated source checkout:
+From an updated source checkout:
 
 ```bash
-git pull
 python -m pip install --upgrade .
 ```
 
-For an editable installation, source-code changes are already visible. Run:
+For an editable development installation, reinstall when project metadata or dependencies change:
 
 ```bash
-python -m pip install -e .
+python -m pip install -e ".[test,docs]"
 ```
 
-again if package metadata or dependencies in `pyproject.toml` have changed.
-
----
-
-## 15. Uninstall
-
-Remove the installed BEAST package with:
+## Uninstall
 
 ```bash
-python -m pip uninstall beast_battery_estimation_toolkit
+python -m pip uninstall beast-battery-estimation-architecture-simulation-toolkit
 ```
 
-This removes the BEAST package but does not automatically remove NumPy, SciPy,
-Matplotlib, or other dependencies that may be shared by other Python packages.
+The distribution name used by `pip` is different from the Python import name:
 
-To remove the complete isolated environment, deactivate it first:
-
-```bash
-deactivate
+```python
+import beast
 ```
 
-and delete `.venv`.
-
-### Linux / macOS
-
-```bash
-rm -rf .venv
-```
-
-### Windows — PowerShell
-
-```powershell
-Remove-Item -Recurse -Force .venv
-```
-
----
-
-## 16. Troubleshooting
+## Troubleshooting
 
 ### `ModuleNotFoundError: No module named 'beast'`
 
-If BEAST is supposed to be installed, verify:
+Check whether BEAST is installed in the active interpreter:
 
 ```bash
-python -m pip show beast_battery_estimation_toolkit
+python -m pip show beast-battery-estimation-architecture-simulation-toolkit
+python -m pip --version
 ```
 
-If it is not installed:
+If it is not installed, activate the intended virtual environment and run:
 
 ```bash
 python -m pip install .
 ```
 
-If you are deliberately using the source-tree workflow instead, ensure that
-`src/` is on `PYTHONPATH`.
+### `pip` uses a different Python installation
 
-Linux / macOS:
-
-```bash
-export PYTHONPATH="$PWD/src"
-```
-
-Windows PowerShell:
-
-```powershell
-$env:PYTHONPATH="$PWD\src"
-```
-
----
-
-### `pip` installs into a different Python interpreter
-
-Use:
+Prefer:
 
 ```bash
 python -m pip ...
 ```
 
-instead of calling `pip` directly.
+over calling `pip` directly.
 
-Check:
+Compare:
 
 ```bash
 python --version
 python -m pip --version
 ```
 
----
-
 ### Python is older than 3.10
 
-BEAST declares:
+Create a new environment with Python 3.10 or newer and reinstall BEAST.
 
-```text
-requires-python = ">=3.10"
-```
+### Dependency installation fails
 
-Create the environment with a supported interpreter, for example:
+Upgrade packaging tools first:
 
 ```bash
-python3.11 -m venv .venv
+python -m pip install --upgrade pip setuptools wheel
 ```
 
-or:
+Then retry:
 
 ```bash
-python3.12 -m venv .venv
-```
-
-depending on the Python versions installed on your system.
-
----
-
-### Problems importing NumPy, SciPy, or Matplotlib
-
-Upgrade the dependencies in the active virtual environment:
-
-```bash
-python -m pip install --upgrade numpy scipy matplotlib
-```
-
-Then verify:
-
-```bash
-python -c "import numpy, scipy, matplotlib; print('Dependencies OK')"
-```
-
----
-
-### Matplotlib display errors
-
-For automated tests or machines without a display:
-
-```bash
-export MPLBACKEND=Agg
-```
-
-On Windows PowerShell:
-
-```powershell
-$env:MPLBACKEND="Agg"
-```
-
----
-
-### Editable installation does not reflect metadata changes
-
-Editable installation reflects Python source changes immediately, but changes
-to dependencies, console scripts, version numbers, or other package metadata
-may require reinstalling:
-
-```bash
-python -m pip install -e .
-```
-
----
-
-## 17. Installation choices at a glance
-
-| Goal | Recommended command |
-|---|---|
-| Use a released wheel | `python -m pip install dist/<wheel>.whl` |
-| Install from repository source | `python -m pip install .` |
-| Develop with package installed | `python -m pip install -e .` |
-| Install with tests | `python -m pip install -e ".[test]"` |
-| Install with docs | `python -m pip install -e ".[docs]"` |
-| Install with tests + docs | `python -m pip install -e ".[test,docs]"` |
-| Develop without installing BEAST | Install dependencies and use `PYTHONPATH=src` |
-
----
-
-## 18. Recommended setup for researchers
-
-For most users who want to run experiments and inspect the framework:
-
-```bash
-git clone https://github.com/USERNAME/REPOSITORY.git
-cd REPOSITORY
-
-python3 -m venv .venv
-source .venv/bin/activate
-
-python -m pip install --upgrade pip
 python -m pip install .
 ```
 
-Verify:
+### Editable installation does not reflect metadata changes
 
-```bash
-python -c "import beast; print('BEAST installation OK')"
-python examples/synthetic_run.py
-```
-
-For researchers who also intend to modify and validate the algorithms:
+Editable installs reflect normal source changes, but dependency, version, entry-point, or package-data changes can require reinstalling:
 
 ```bash
 python -m pip install -e ".[test,docs]"
+```
+
+### Source-tree tests pass but the installed package fails
+
+Build and test the wheel in a fresh environment:
+
+```bash
+python -m build
+python -m venv .venv-wheel
+# activate .venv-wheel
+python -m pip install --upgrade pip
+python -m pip install dist/*.whl
+python -c "import beast; print(beast.__version__)"
+```
+
+This verifies the packaged artifact rather than relying on the repository's source-tree test path.
+
+## Recommended setups
+
+For normal library use:
+
+```bash
+python -m venv .venv
+# activate the environment
+python -m pip install .
+```
+
+For development:
+
+```bash
+python -m venv .venv
+# activate the environment
+python -m pip install --upgrade pip
+python -m pip install -e ".[test,docs]"
+python -m pip install ruff build
 python -m pytest
 ```
 
-Continue with [`DEVELOPMENT.md`](DEVELOPMENT.md).
-
----
-
-## License
-
-BEAST is distributed under the **GNU General Public License v3.0
-(GPL-3.0)**.
-
-See [`LICENSE`](LICENSE) for the complete license terms.
+Keep this guide synchronized with `pyproject.toml` whenever supported Python versions, dependencies, extras, or installation methods change.

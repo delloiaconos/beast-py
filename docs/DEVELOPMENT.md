@@ -1,51 +1,14 @@
 # BEAST Development Guide
 
-This document describes how to develop, test, document, and package the Python implementation of **BEAST: Battery Estimation Architecture and Simulation Toolkit**.
+This guide describes the recommended workflow for developing **BEAST — Battery Estimation Architecture and Simulation Toolkit**.
 
-The development workflow is intentionally **source-tree based**: the BEAST package itself does **not** need to be installed into the virtual environment for normal development and testing. Only the external Python dependencies are installed. The source code is imported directly from `src/`.
+For installation-only instructions, see [`INSTALLATION.md`](INSTALLATION.md).
 
----
+## Requirements
 
-## 1. Requirements
+BEAST requires Python 3.10 or newer. Use a virtual environment for development.
 
-The project currently requires:
-
-- Python **3.10 or newer**
-- NumPy `>=1.23`
-- SciPy `>=1.9`
-- Matplotlib `>=3.6`
-
-Development tools:
-
-- Pytest `>=7` for automated testing
-- pdoc `>=14` for API documentation
-
-Optional release/development tools:
-
-- `build` for creating wheels and source distributions
-- `ruff` for static checks and formatting/lint support
-
-Git is recommended for normal development.
-
----
-
-## 2. Get the source code
-
-Clone the repository and enter the project directory:
-
-```bash
-git clone https://github.com/delloiaconos/beast-py.git
-cd beast
-```
-
-
-Do not work directly inside `dist/`, `build/`, generated documentation, or Python cache directories.
-
----
-
-## 3. Create an isolated development environment
-
-Using a virtual environment is strongly recommended so that BEAST development dependencies do not interfere with other Python projects.
+Create and activate one, then install BEAST in editable mode with its declared test and documentation extras:
 
 ### Linux / macOS
 
@@ -53,721 +16,336 @@ Using a virtual environment is strongly recommended so that BEAST development de
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
+python -m pip install -e ".[test,docs]"
 ```
 
 ### Windows PowerShell
 
 ```powershell
-py -3.10 -m venv .venv
+py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
+python -m pip install -e ".[test,docs]"
 ```
 
-To leave the environment later:
+Ruff and the Python build frontend are useful development tools but are not currently included in the optional dependency groups:
 
 ```bash
-deactivate
+python -m pip install ruff build
 ```
 
----
-
-## 4. Install only the required dependencies
-
-For normal development, **do not install the BEAST package itself** with `pip install .`.
-
-Install only the external dependencies:
-
-```bash
-python -m pip install \
-  "numpy>=1.23" \
-  "scipy>=1.9" \
-  "matplotlib>=3.6" \
-  "pytest>=7" \
-  "pdoc>=14"
-```
-
-On Windows PowerShell, the same command can be written on one line:
-
-```powershell
-python -m pip install "numpy>=1.23" "scipy>=1.9" "matplotlib>=3.6" "pytest>=7" "pdoc>=14"
-```
-
-This installs the libraries required to execute, test, and document the project, while keeping the BEAST source code directly editable in the repository.
-
-### Optional development tools
-
-Install these only when needed:
-
-```bash
-python -m pip install build ruff
-```
-
-They are not required to run the numerical framework or its test suite.
-
----
-
-## 5. Develop directly from `src/`
-
-The project follows the standard Python `src` layout. Therefore, when the package is not installed, Python must be told where the source package is located.
-
-### Linux / macOS
-
-From the repository root:
-
-```bash
-export PYTHONPATH="$PWD/src"
-```
-
-### Windows PowerShell
-
-```powershell
-$env:PYTHONPATH = "$PWD\src"
-```
-
-You can verify that the source package is visible with:
-
-```bash
-python -c "import beast; print(beast.__file__)"
-```
-
-The printed path should point inside your repository, for example:
+## Project structure
 
 ```text
-.../beast-python/src/beast/__init__.py
+src/beast/
+├── cell_models/     # Battery-model base class, implementations, and registry
+├── core/            # Shared array types and small data/numerical helpers
+├── estimators/      # Estimator base class, implementations, and registry
+├── io/              # Binary data I/O
+└── __init__.py      # Public package API
+
+tests/               # Unit and numerical tests
+docs/                # Project documentation
 ```
 
-This is the preferred workflow during active development because every code change is immediately visible to Python without reinstalling anything.
+Keep subsystem responsibilities clear:
 
----
+- `core` should remain small and broadly reusable;
+- model-specific helpers belong in `cell_models`;
+- estimator-specific helpers belong in `estimators`;
+- file-format concerns belong in `io`;
+- fixtures, stubs, and dummy implementations used only by tests belong in `tests`.
 
-## 6. Run the test suite
+## Running tests
 
-From the repository root:
+Run the complete suite from the repository root:
 
 ```bash
-MPLBACKEND=Agg python -m pytest
-```
-
-The `Agg` Matplotlib backend prevents graphical windows from opening during automated tests.
-
-On Windows PowerShell:
-
-```powershell
-$env:MPLBACKEND = "Agg"
 python -m pytest
 ```
 
-The current suite covers the battery models, estimators, Jacobians, binary I/O, processing workflow, pulse generation, plotting, factory functions, and the plain NumPy/dictionary API.
-
-### Run a single test file
+Useful variants:
 
 ```bash
-python -m pytest tests/test_binary_io.py
-```
-
-### Run one test function
-
-```bash
-python -m pytest tests/test_binary_io.py::test_name
-```
-
-### Run tests matching a keyword
-
-```bash
-python -m pytest -k ekf
-```
-
-### More verbose output
-
-```bash
-python -m pytest -vv
-```
-
-### Stop on the first failure
-
-```bash
+python -m pytest -v
 python -m pytest -x
+python -m pytest tests/test_cellmodels.py
+python -m pytest -k estimator
 ```
 
-A change should normally not be committed until the complete test suite passes.
+Do not document a fixed number of passing tests. The expected baseline is that the complete suite passes for supported Python versions.
 
----
+## Code checks
 
-## 7. Run the example program
-
-With `PYTHONPATH` pointing to `src/`:
+If Ruff is installed:
 
 ```bash
-MPLBACKEND=Agg python examples/synthetic_run.py
+ruff check src tests
 ```
 
-This is a useful quick check after changes to battery models or estimators.
+The current Ruff configuration targets Python 3.10 and uses a maximum line length of 100 characters.
 
-The example should execute directly from the working tree; no BEAST package installation is required.
+Before committing, run both tests and lint checks:
 
----
+```bash
+python -m pytest
+ruff check src tests
+```
 
-## 8. Development principles
+## Development principles
 
-The current Python architecture deliberately separates the **numerical core** from the **MATLAB compatibility layer**.
+BEAST is scientific software. Numerical behavior, API clarity, and testability are all part of correctness.
 
-For new development:
+Prefer code that:
 
-- use Python scalars for scalar values;
-- use one-dimensional NumPy arrays for states, parameters, inputs, and outputs;
-- use two-dimensional NumPy arrays for matrices, Jacobians, covariance matrices, and histories;
-- use dictionaries for named configuration and result groups;
-- avoid introducing new MATLAB-style container classes into numerical code;
-- keep legacy dataclasses in `beast.core.types` only as compatibility adapters;
-- normalize compatibility objects before numerical processing begins.
+- makes units, array shapes, and sampling assumptions explicit;
+- rejects invalid numerical input instead of propagating it silently;
+- keeps battery-model physics separate from estimator behavior;
+- minimizes coupling between models and estimators;
+- can be tested with small, deterministic fixtures;
+- uses clear Python APIs without requiring knowledge of the original MATLAB implementation.
 
-The numerical modules should not depend on the legacy dataclasses.
+Compatibility with existing behavior matters, but new APIs should favor clear and documented Python semantics.
 
-The most important supporting modules are:
+## Numerical conventions
+
+Use NumPy arrays for numerical vectors and matrices, and reuse the aliases in `beast.core.arrays` when they improve type clarity.
+
+Document non-obvious shapes and units. Typical symbols are:
 
 ```text
-beast.core.arrays
-    NumPy conversion, shape validation, scalar extraction, and field access.
-
-beast.core.data
-    Construction and validation of plain dictionaries used by the framework.
-
-beast.core.types
-    Legacy MATLAB-shaped compatibility adapters.
+x   state vector
+p   parameter vector
+u   input vector
+y   measurement vector
+P   covariance matrix
 ```
 
----
+### Finite values
 
-## 9. Numerical conventions
-
-When modifying algorithms, preserve the conventions used by the framework.
-
-### States and parameters
-
-States and parameter vectors should normally be one-dimensional:
+Physical and numerical inputs should normally be finite. When adding validation, consider explicit checks such as:
 
 ```python
-x = np.array([0.85, 0.0], dtype=float)
-p = np.array([0.01, 0.02, 900.0], dtype=float)
+np.isfinite(value)
+np.all(np.isfinite(array))
 ```
 
-Avoid unnecessary `(n, 1)` MATLAB-style column arrays unless a matrix operation specifically requires them.
+A comparison such as `value <= 0` does not reject `NaN` on its own.
 
-### Covariances and Jacobians
+### Covariance matrices
 
-Matrices remain two-dimensional:
+Validate the assumptions required by the algorithm. Depending on the use case, this can include:
 
-```python
-sx_w = np.diag([1e-8, 1e-8])
-```
+- correct shape;
+- finite values;
+- symmetry;
+- positive semidefiniteness or positive definiteness.
 
-### Dataset structures
+Estimator tests should also detect numerical loss of covariance symmetry when relevant.
 
-Prefer dictionaries containing NumPy arrays:
+### Floating-point tests
 
-```python
-dataset = {
-    "delta_t": delta_t,
-    "t_all": time,
-    "u_all": current,
-    "y_exp_all": voltage,
-    "x0": initial_state,
-    "p0": initial_parameters,
-}
-```
-
-### Binary compatibility
-
-Legacy MATLAB binary files use MATLAB-compatible column-major ordering. 
-Do not change serialization ordering without also changing compatibility tests and documenting the incompatibility.
-
-### Floating-point comparisons
-
-Do not compare computed floating-point arrays with `==` unless exact equality is explicitly required. In tests, use NumPy tolerance-based comparison functions such as:
+Use tolerant comparisons for floating-point results:
 
 ```python
 np.testing.assert_allclose(actual, expected, rtol=..., atol=...)
 ```
 
-Choose tolerances based on the numerical meaning of the quantity being tested.
+Choose tolerances based on the operation being tested.
 
----
+## Working on battery models
 
-## 10. Adding or modifying a battery model
+Built-in models derive from `beast.cell_models.CellModel`.
 
-Battery models live in:
+The current registry supports:
 
-```text
-src/beast/cell_models/
-```
-
-A model should follow the interface defined by the base model and provide the model functions required by the estimators, including the relevant state/output functions and Jacobians.
+- `H0F0A`;
+- `R0A1B1`;
+- `R0R1C1`;
+- `R0R1C1R2C2`;
+- `R0R1T1`.
 
 When adding a model:
 
-1. Add the implementation module under `cell_models/`.
-2. Follow the existing state and parameter ordering conventions.
-3. Add pdoc-compatible docstrings.
-4. Add type hints to public functions and methods.
-5. Expose the model from `cell_models/__init__.py` if it is part of the public API.
-6. Update `cell_models/factory.py` if selector-based construction is supported.
-7. Add dimensional tests.
-8. Add analytical Jacobian tests against finite differences.
-9. Add at least one representative numerical evolution test.
-10. Update architecture/API documentation if the public interface changes.
+1. create a module under `src/beast/cell_models/`;
+2. implement the required `CellModel` operations;
+3. define required data and dimensions clearly;
+4. add the class to `CELL_MODEL_REGISTRY`;
+5. export it from `beast.cell_models` and, if public, from `beast`;
+6. add tests.
 
-A model change should not be accepted solely because a simulation appears reasonable; its analytical Jacobians should remain independently testable.
+Model tests should cover dimensions, state/output equations, invalid inputs, state and parameter coercion, boundary behavior, and analytical Jacobians against finite-difference approximations where applicable.
 
----
+## Working on estimators
 
-## 11. Adding or modifying an estimator
+Built-in estimators derive from `beast.estimators.Estimator`.
 
-Estimator implementations live in:
+The current registry supports:
 
-```text
-src/beast/estimators/
-```
+- `EKFDUAL`;
+- `MIXALGORITHM`;
+- `ENHANCEDMIXALGORITHM`;
+- `OPENLOOP`.
 
 When adding an estimator:
 
-1. Derive from or follow the estimator base interface.
-2. Keep estimator state internal only where it is genuinely algorithmic state.
-3. Accept NumPy arrays and plain dictionary data at public numerical boundaries.
-4. Avoid depending on `beast.core.types` compatibility dataclasses.
-5. Add the estimator to `estimators/__init__.py` when public.
-6. Update `estimators/factory.py` when selector-based construction is required.
-7. Add initialization tests.
-8. Add single-step tests where practical.
-9. Add complete-run tests.
-10. Test failure cases and incompatible dimensions.
-11. Document covariance assumptions and any estimator-specific tuning parameters.
+1. create a module under `src/beast/estimators/`;
+2. implement the base estimator interface;
+3. make assumptions about model dimensions and sampling time explicit;
+4. add the class to `ESTIMATOR_REGISTRY`;
+5. export it from `beast.estimators` and, if public, from `beast`;
+6. add numerical tests.
 
-For Kalman-family estimators, changes to covariance propagation or Jacobian use should receive particularly careful numerical regression testing.
+Estimator tests should cover initialization, prediction, measurement updates, covariance behavior, state/parameter coercion, multi-step trajectories, and failure cases.
 
----
+Keep fake models and other estimator test scaffolding under `tests/`, not in production modules.
 
-## 12. Documentation rules
+## Model/estimator boundaries
 
-Public modules, classes, methods, and functions should contain pdoc-compatible docstrings.
+A battery model should describe the system being estimated. Estimator-specific tuning such as process noise, measurement noise, and estimator covariance belongs conceptually to the estimator side of the architecture.
 
-A useful docstring should explain:
+Estimators should depend only on the model behavior they require. If this boundary is formalized further, prefer an estimator-facing `Protocol` while retaining the abstract `CellModel` base class for built-in BEAST models.
 
-- purpose;
-- parameters and expected shapes;
-- return values and shapes;
-- units where important;
-- algorithm-specific assumptions;
-- exceptions or invalid conditions;
-- compatibility behavior where relevant.
+## Sampling time
 
-Do not merely restate the function name.
+Sampling time must have one unambiguous meaning throughout a simulation.
 
-### Build API documentation
+When changing `delta_t` handling:
 
-Ensure `PYTHONPATH` includes `src/`, then run:
+- require a finite, strictly positive value;
+- document which object owns it;
+- avoid independent model and estimator values that can silently disagree;
+- add tests for any override behavior.
 
-```bash
-pdoc beast -o docs/api
+Changes in this area require particular care because the current code passes timing information to both models and estimators.
+
+## Binary I/O
+
+Legacy binary loading is implemented in `beast.io.binary` and is used by `initCellModel()`.
+
+When changing binary I/O:
+
+- preserve the expected element order;
+- validate file sizes and requested shapes;
+- keep file-format logic out of numerical model equations;
+- use temporary files/directories in tests;
+- keep the matrix-order regression tests passing.
+
+## Factories and registries
+
+Model and estimator selection is registry-based:
+
+```python
+from beast import selectCellModel, selectEstimator
+
+model_class = selectCellModel("R0R1C1")
+estimator_class = selectEstimator("EKFDUAL")
 ```
 
-To start a local documentation server:
+When modifying a registry, add factory tests and update public documentation.
+
+Invalid selectors should raise clear, actionable errors.
+
+## Documentation
+
+Documentation must describe the repository as it exists now.
+
+Before documenting a command, module, script, or file, verify that it exists and works. In particular:
+
+- do not reference example scripts that are not in the repository;
+- do not document a CLI unless a working CLI is shipped;
+- do not hard-code test counts;
+- keep installation commands synchronized with `pyproject.toml`;
+- document important units, shapes, assumptions, and exceptions in public APIs.
+
+API documentation can be generated with the declared `docs` extra:
 
 ```bash
 pdoc beast
 ```
 
-The generated `docs/api/` directory is ignored by Git in the current project configuration, so it can be regenerated locally as needed.
-
----
-
-## 13. Code checks
-
-The project currently targets a maximum line length of 100 characters and Python 3.10 semantics.
-
-If Ruff is installed:
+For a local documentation server:
 
 ```bash
-ruff check src tests examples
+pdoc beast --http localhost:8080
 ```
 
-If a future formatter is introduced, its configuration should be recorded in `pyproject.toml` and used consistently by all contributors.
+## Building distributions
 
-Before committing, Python source files can also be syntax-checked with:
-
-```bash
-python -m compileall -q src tests examples
-```
-
----
-
-## 14. Recommended development cycle
-
-A normal development iteration should be:
-
-```text
-1. Update local main branch.
-2. Create a feature/fix branch.
-3. Activate the virtual environment.
-4. Set PYTHONPATH to src/.
-5. Make a small, focused change.
-6. Add or update tests for that change.
-7. Run the affected tests.
-8. Run the complete test suite.
-9. Run the synthetic example when numerical code changed.
-10. Update pdoc docstrings and Markdown documentation.
-11. Run static/syntax checks.
-12. Review the diff.
-13. Commit with a descriptive message.
-```
-
-Example Git workflow:
-
-```bash
-git switch main
-git pull --ff-only
-git switch -c feature/new-cell-model
-
-# edit source and tests
-
-MPLBACKEND=Agg python -m pytest
-ruff check src tests examples
-git status
-git diff
-git add src tests docs
-git commit -m "Add new battery cell model"
-```
-
-Keep commits focused. Avoid mixing large formatting changes with numerical algorithm changes in the same commit.
-
----
-
-## 15. Regression testing for scientific code
-
-BEAST is scientific/numerical software, so regression testing should protect both **software behavior** and **scientific behavior**.
-
-For algorithm changes, consider storing or generating deterministic reference cases containing:
-
-- input current;
-- measured or simulated voltage;
-- initial state;
-- initial parameters;
-- covariance matrices;
-- expected state histories;
-- expected parameter histories;
-- expected model outputs.
-
-Whenever possible, compare important changes against:
-
-1. the previous Python implementation;
-2. the original MATLAB implementation;
-3. the C++ implementation, where available;
-4. independently calculated analytical or finite-difference results.
-
-For MATLAB/Python parity studies, run both implementations on the same `MD_*.in` data and compare the exported histories with documented absolute and relative tolerances.
-
-Do not silently update reference values simply because a test fails. First determine whether the algorithm changed intentionally or a regression was introduced.
-
----
-
-## 16. Test data
-
-Small deterministic test data may be stored under the test tree if appropriate, for example:
-
-```text
-tests/
-└── data/
-    ├── model_case_01/
-    └── matlab_reference_01/
-```
-
-Avoid committing large experimental datasets directly to the Git repository.
-
-For larger datasets, consider separate release assets, archival storage, or a DOI-backed research-data repository, and document how tests can obtain them.
-
-Tests should not depend on network access unless explicitly separated from the normal unit-test suite.
-
----
-
-## 17. When an editable installation is useful
-
-The normal workflow in this guide intentionally avoids installing BEAST itself.
-
-However, an editable installation can be useful when testing the installed command-line interface or behavior exactly as another Python project would import it:
-
-```bash
-python -m pip install -e .
-```
-
-With testing dependencies:
-
-```bash
-python -m pip install -e ".[test]"
-```
-
-With documentation dependencies:
-
-```bash
-python -m pip install -e ".[docs]"
-```
-
-An editable install does not copy the source tree into the environment; it links the environment to the working source tree. Nevertheless, it should be considered an **optional integration-development mode**, not the default source-tree workflow described above.
-
-To remove it:
-
-```bash
-python -m pip uninstall beast_battery_estimation_toolkit
-```
-
----
-
-## 18. Build release artifacts
-
-Packaging is not required for everyday development.
-
-When preparing a release, install the build frontend:
+Install the build frontend if necessary:
 
 ```bash
 python -m pip install build
 ```
 
-Clean previous generated artifacts:
-
-```bash
-rm -rf build dist *.egg-info src/*.egg-info
-```
-
-On Windows, remove the equivalent directories manually or with PowerShell.
-
-Build the wheel and source distribution:
+Build the wheel and source distribution with:
 
 ```bash
 python -m build
 ```
 
-Artifacts will be created under:
+Artifacts are written to `dist/`.
 
-```text
-dist/
-```
-
-Before publishing a release, test the wheel in a **fresh virtual environment** rather than assuming that a successful source-tree test guarantees correct packaging.
-
----
-
-## 19. Clean-install verification
-
-A simple release verification workflow is:
+Before a release, test the built wheel in a clean virtual environment rather than relying only on source-tree imports:
 
 ```bash
-python -m venv .venv-release
-source .venv-release/bin/activate
+python -m venv .venv-wheel
+# activate .venv-wheel
 python -m pip install --upgrade pip
 python -m pip install dist/*.whl
-python -c "import beast; print(beast.__file__)"
-beast --help
+python -c "import beast; print(beast.__version__)"
+python -c "from beast import selectCellModel; print(selectCellModel('R0R1C1').__name__)"
 ```
 
-Then run at least one representative numerical example against the installed wheel.
+This catches packaging problems that can be hidden by the repository's `src` test path.
 
-After verification:
+## Versioning
 
-```bash
-deactivate
-rm -rf .venv-release
-```
-
----
-
-## 20. Versioning and changelog
-
-When preparing a new release:
-
-1. Decide the next version number.
-2. Update the version in `pyproject.toml`.
-3. Update `CHANGELOG.md`.
-4. Update `CITATION.cff` if it contains a release version/date.
-5. Run all tests and validation checks.
-6. Build the package.
-7. Test the built wheel in a clean environment.
-8. Commit the release changes.
-9. Create an annotated Git tag.
-10. Publish the GitHub release.
-
-Example:
-
-```bash
-git tag -a v0.3.0 -m "BEAST 0.3.0"
-git push origin v0.3.0
-```
-
-If the project is archived through Zenodo or another research repository, create/update the DOI-backed release after the GitHub release and update citation metadata as appropriate.
-
----
-
-## 21. Changes that require special care
-
-The following areas should be considered compatibility-sensitive:
-
-- state-vector ordering;
-- parameter-vector ordering;
-- sign convention for battery current;
-- OCV interpolation behavior;
-- state/parameter compatibility projections;
-- Jacobian definitions;
-- covariance ordering and dimensions;
-- MATLAB binary serialization order;
-- estimator update sequence;
-- clipping or boundary handling;
-- public selector strings;
-- returned dictionary field names.
-
-If one of these intentionally changes, document the change in `CHANGELOG.md` and add a migration note when existing users may be affected.
-
----
-
-## 22. Suggested branch naming
-
-Examples:
+The package version is currently present in both:
 
 ```text
-feature/new-cell-model
-feature/new-estimator
-fix/ekf-covariance-update
-fix/binary-import
-refactor/model-api
-docs/development-guide
-test/matlab-reference
+pyproject.toml
+src/beast/__init__.py
 ```
 
-Branch names should communicate the purpose of the work rather than the contributor's name.
+Keep them synchronized when preparing a release.
 
----
+## Scientific regression tests
 
-## 23. Suggested commit style
+Unit tests are necessary but not sufficient for scientific algorithms.
 
-Examples:
+For models and estimators, maintain compact reference datasets when practical. Useful reference data includes inputs, initial conditions, state trajectories, parameter trajectories, model outputs, and covariance trajectories.
 
-```text
-Add R0R1C1 temperature-dependent model
-Fix dual EKF covariance update
-Add MATLAB parity regression test
-Refactor pulse generator to plain NumPy inputs
-Document estimator extension interface
-```
+Expected results should come from a trusted implementation, analytical result, or independently validated dataset. Avoid generating reference results through the same code path that the test is intended to validate.
 
-Describe what changed. For scientific changes, the commit or pull request should also explain **why** the numerical behavior changed.
+## Pull-request checklist
 
----
+- [ ] The complete test suite passes.
+- [ ] New behavior has tests.
+- [ ] Numerical changes have appropriate tolerance-based or regression tests.
+- [ ] Ruff reports no new issues.
+- [ ] Public API changes are documented.
+- [ ] Installation instructions still match `pyproject.toml`.
+- [ ] Test-only implementations remain under `tests/`.
+- [ ] Registry changes include selector tests.
+- [ ] Documentation references only files and features that exist.
+- [ ] Packaging changes have been verified using a built wheel.
 
-## 24. Before opening a pull request
-
-Check the following:
-
-- [ ] The change has a clear purpose.
-- [ ] New numerical behavior is covered by tests.
-- [ ] Existing tests still pass.
-- [ ] Analytical Jacobians are checked when applicable.
-- [ ] The synthetic example still runs when relevant.
-- [ ] Public functions have type hints.
-- [ ] Public APIs have pdoc-compatible docstrings.
-- [ ] NumPy shapes and units are documented.
-- [ ] The numerical layer does not introduce new dependencies on legacy dataclasses.
-- [ ] Compatibility-sensitive changes are documented.
-- [ ] `CHANGELOG.md` is updated when appropriate.
-- [ ] Generated files, virtual environments, caches, and build products are not committed.
-
----
-
-## 25. Minimal daily command sequence
-
-For an existing clone, a typical Linux/macOS development session can be as short as:
+## Recommended daily workflow
 
 ```bash
-cd REPOSITORY
-source .venv/bin/activate
-export PYTHONPATH="$PWD/src"
-export MPLBACKEND=Agg
+# activate the virtual environment
+python -m pip install -e ".[test,docs]"
+
+# edit source and tests
 python -m pytest
+ruff check src tests
 ```
 
-Then edit the code and repeatedly run only the relevant tests:
+For release or packaging changes, also run:
 
 ```bash
-python -m pytest tests/test_cell_models.py
-python -m pytest tests/test_estimators.py
+python -m build
 ```
 
-Before committing:
-
-```bash
-python -m pytest
-python -m compileall -q src tests examples
-ruff check src tests examples   # if Ruff is installed
-```
-
----
-
-## 26. Re-create the environment from scratch
-
-If the development environment becomes inconsistent, it is often better to delete it and recreate it rather than trying to repair packages individually.
-
-Linux/macOS:
-
-```bash
-deactivate 2>/dev/null || true
-rm -rf .venv
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install "numpy>=1.23" "scipy>=1.9" "matplotlib>=3.6" "pytest>=7" "pdoc>=14"
-export PYTHONPATH="$PWD/src"
-MPLBACKEND=Agg python -m pytest
-```
-
-This recreates only the external dependencies and continues to execute BEAST directly from the repository source tree.
-
----
-
-## 27. Current validation baseline
-
-At the time this guide was prepared, the current source tree passes:
-
-```text
-28 tests passed
-```
-
-The synthetic dual-EKF example also executes successfully from the source tree using `PYTHONPATH=src`.
-
-Treat this as a baseline rather than a permanent test count: the number of tests should grow as new models, algorithms, regression cases, and scientific reference datasets are added.
-
----
-
-## 28. Further documentation
-
-Developers should also consult:
-
-- `README.md` — project overview and user-facing introduction;
-- `docs/ARCHITECTURE.md` — package architecture and extension points;
-- `docs/PLAIN_DATA_API.md` — NumPy/dictionary API conventions;
-- `docs/MATLAB_TO_PYTHON.md` — mapping from the original MATLAB implementation;
-- `docs/CORRECTIONS.md` — documented corrections made during conversion;
-- `docs/VALIDATION.md` — current automated validation and remaining parity work;
-- `CHANGELOG.md` — release history;
-- `CITATION.cff` — preferred scientific citation;
-- `LICENSE` — GNU General Public License v3.0 terms.
-
----
-
-## 29. Philosophy of the development workflow
-
-BEAST originates from scientific work on battery modelling and state estimation. Development should therefore favor:
-
-- reproducible numerical behavior;
-- explicit assumptions;
-- transparent equations and model structure;
-- independent validation of derivatives and estimators;
-- readable NumPy-based implementations;
-- backwards compatibility where it does not obstruct a cleaner numerical core;
-- traceability between scientific changes, tests, and documentation.
-
-The objective is not only to make the code run, but to make numerical results understandable, testable, and reproducible by other researchers and developers.
+and verify the resulting wheel in a clean environment.
