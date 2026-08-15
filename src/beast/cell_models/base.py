@@ -16,6 +16,7 @@ from beast.core.arrays import (
     get_field,
     scalar_from,
 )
+
 from beast.core.data import normalize_covariance
 
 
@@ -184,32 +185,3 @@ class CellModel(ABC):
             raise ValueError(f"u_all must have {cls.Nu} rows, got {u_all.shape[0]}")
 
 
-
-class CellModel_Dummy(CellModel):
-
-    def __init__(self):
-        self.Nx = 2
-        self.Np = 2
-        self.Nu = 1
-        self.Ny = 1
-
-    def f0(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def g0(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def f1x(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def f1p(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def g1x(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def g1p(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def coerce_parameters(cls, parameters: Any) -> FloatArray:
-        raise NotImplementedError

@@ -4,7 +4,7 @@ import pytest
 
 from beast.estimators.factory import createEstimator, selectEstimator, ESTIMATOR_REGISTRY
 
-from beast.cell_models.base import CellModel_Dummy
+from tests.helpers.cell_models import CellModel_Dummy
 
 def test_estimator_selector_accepts_class_name():
     assert selectEstimator(" EKFDUAL " ) is ESTIMATOR_REGISTRY["EKFDUAL"]
