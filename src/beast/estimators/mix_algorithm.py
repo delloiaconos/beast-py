@@ -22,7 +22,7 @@ class Estimator_MixAlgorithm(Estimator):
         """Set initial state, parameters, gains, and sample metadata."""
         self.xPold = self.state(x0)
         self.pPold = self.parameters(p0)
-        self._input(uold)
+        self.input(uold)
         self._measurement(yXPold)
         self.told = float(told)
         diagonal = np.diag(self.objModel.sxW)
@@ -36,7 +36,7 @@ class Estimator_MixAlgorithm(Estimator):
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
-        u_new = self._input(unew)
+        u_new = self.input(unew)
         y_new = self._measurement(yXPnew)
         model = self.objModel
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)

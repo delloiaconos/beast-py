@@ -27,7 +27,7 @@ class CellModel_R0A1B1(CellModel):
 
         x = self.state(xold)
         p = self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array(
             [
@@ -42,7 +42,7 @@ class CellModel_R0A1B1(CellModel):
 
         x = self.state(xold)
         p = self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array(
             [self._interp(self.lutocv0, x[0]) - p[0] * u[0] + x[1]],
@@ -54,7 +54,7 @@ class CellModel_R0A1B1(CellModel):
 
         _ = self.state(xold) 
         p = self.parameters(pold)
-        _ = self._input(uold)
+        _ = self.input(uold)
         
         return np.array([[1.0, 0.0], [0.0, p[1]]], dtype=np.float64)
 
@@ -63,7 +63,7 @@ class CellModel_R0A1B1(CellModel):
 
         x = self.state(xold) 
         _ =self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         result = np.zeros((2, 3), dtype=np.float64)
         result[1, 1] = x[1]
@@ -75,7 +75,7 @@ class CellModel_R0A1B1(CellModel):
 
         x = self.state(xold)
         _ = self.parameters(pold)
-        _ = self._input(uold)
+        _ = self.input(uold)
 
         return np.array([[self._interp(self.lutocv1, x[0]), 1.0]], dtype=np.float64)
 
@@ -84,7 +84,7 @@ class CellModel_R0A1B1(CellModel):
 
         _ = self.state(xold); 
         _ = self.parameters(pold); 
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array([[-u[0], 0.0, 0.0]], dtype=np.float64)
 

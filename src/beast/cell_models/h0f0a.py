@@ -32,7 +32,7 @@ class CellModel_H0F0A(CellModel):
 
         x = self.state(xold)
         _ = self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array([x[0] - self.CoulombCountingConstant * u[0]], dtype=np.float64)
 
@@ -41,7 +41,7 @@ class CellModel_H0F0A(CellModel):
 
         x = self.state(xold)
         p = self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array([self._interp(self.lutocv0, x[0]) - p[0] * u[0]], dtype=np.float64)
 
@@ -50,7 +50,7 @@ class CellModel_H0F0A(CellModel):
 
         _ = self.state(xold) 
         _ = self.parameters(pold) 
-        _ = self._input(uold)
+        _ = self.input(uold)
         
         return np.array([[1.0]], dtype=np.float64)
 
@@ -59,7 +59,7 @@ class CellModel_H0F0A(CellModel):
 
         _ = self.state(xold)
         _ = self.parameters(pold)
-        _ = self._input(uold)
+        _ = self.input(uold)
 
         return np.zeros((1, 1), dtype=np.float64)
 
@@ -68,7 +68,7 @@ class CellModel_H0F0A(CellModel):
 
         x = self.state(xold)
         _ = self.parameters(pold)
-        _ = self._input(uold)
+        _ = self.input(uold)
         
         return np.array([[self._interp(self.lutocv1, x[0])]], dtype=np.float64)
 
@@ -77,7 +77,7 @@ class CellModel_H0F0A(CellModel):
         
         _ = self.state(xold)
         _ =  self.parameters(pold)
-        u = self._input(uold)
+        u = self.input(uold)
 
         return np.array([[-u[0]]], dtype=np.float64)
 

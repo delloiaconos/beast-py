@@ -64,7 +64,7 @@ class Estimator_EKFdual(Estimator):
         """Set initial state, parameters, gains, and sample metadata."""
         x = self.state(x0)
         p = self.parameters(p0)
-        u = self._input(uold)
+        u = self.input(uold)
         self._measurement(yXPold)
         self.told = float(told)
         self.uold = u
@@ -80,7 +80,7 @@ class Estimator_EKFdual(Estimator):
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
         model = self.objModel
-        u_new = self._input(unew)
+        u_new = self.input(unew)
         y_new = self._measurement(yXPnew)
 
         # (1) Parameter estimate time update.

@@ -16,7 +16,7 @@ class Estimator_OpenLoop(Estimator):
         """Set initial state, parameters, gains, and sample metadata."""
         self.xPold = self.state(x0)
         self.pPold = self.parameters(p0)
-        self._input(uold)
+        self.input(uold)
         self._measurement(yXPold)
         self.told = float(told)
         self._initialized = True
@@ -24,7 +24,7 @@ class Estimator_OpenLoop(Estimator):
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
-        u_new = self._input(unew)
+        u_new = self.input(unew)
         self._measurement(yXPnew)
         xPnew = self.objModel.f0(self.xPold, self.pPold, u_new, self.deltat)
         self.xPold = self.objModel.coerce_state(xPnew)

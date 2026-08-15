@@ -104,7 +104,7 @@ class CellModel(ABC):
             raise ValueError(f"parameters must have length {self.Np}, got {vector.size}")
         return vector
 
-    def _input(self, value: Any) -> FloatArray:
+    def input(self, value: Any) -> FloatArray:
         vector = as_float_vector(value, name="input")
         if vector.size != self.Nu:
             raise ValueError(f"input must have length {self.Nu}, got {vector.size}")
