@@ -1,10 +1,7 @@
-"""Backward-compatible imports for MATLAB binary I/O.
-
-MATLAB-specific binary interoperability now lives in :mod:`beast.legacy.matlab`.
-This module is retained as a compatibility import path.
-"""
+"""Compatibility helpers for legacy BEAST workflows."""
 
 from beast.legacy.matlab import (
+    init_CellModel,
     read_float64_matrix,
     read_float64_matrix_with_n_columns,
     read_float64_vector,
@@ -15,6 +12,7 @@ from beast.legacy.matlab import (
 )
 
 __all__ = [
+    "init_CellModel",
     "read_float64_vector",
     "read_int32_vector",
     "read_float64_matrix",
