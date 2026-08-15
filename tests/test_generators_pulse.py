@@ -1,4 +1,4 @@
-"""Tests for :class:`beast.profiles.PulseGenerator`."""
+"""Tests for :class:`beast.generators.PulseGenerator`."""
 
 import numpy as np
 import pytest
