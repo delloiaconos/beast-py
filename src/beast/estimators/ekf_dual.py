@@ -1,4 +1,4 @@
-"""Dual extended Kalman filter converted from ``Estimator_EKFdual.m``."""
+"""Dual extended Kalman filter."""
 
 from __future__ import annotations
 
