@@ -47,7 +47,5 @@ def createEstimator(
     delta_t: float,
 ) -> Estimator:
     """Select an estimator selected by its legacy token."""
-
-    estimator_class = selectEstimator(selector)
-
-    return estimator_class(cell_model, delta_t)
+    
+    return selectEstimator(selector)(cell_model, delta_t)
