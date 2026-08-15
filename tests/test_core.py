@@ -10,6 +10,7 @@ import pytest
 CORE_MODULES = (
     "beast.core",
     "beast.core.arrays",
+    "beast.core.data",
 )
 
 
