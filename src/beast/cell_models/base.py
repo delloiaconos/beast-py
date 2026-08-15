@@ -69,7 +69,7 @@ class CellModel(ABC):
         if np.any(np.diff(self.lutsoc) <= 0.0):
             raise ValueError("soc lookup points must be strictly increasing")
 
-        cov = normalize_covariance(covariance, nx=self.Nx, np_=self.Np, ny=self.Ny)
+        cov = normalize_covariance(covariance, nx=self.Nx, np=self.Np, ny=self.Ny)
         self.sxW = cov["sxW"]
         self.sxV = cov["sxV"]
         self.spR = cov["spR"]
