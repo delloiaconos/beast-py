@@ -26,7 +26,7 @@ CASES = [
 ]
 
 
-def finite_difference(function, value, epsilon=1.0e-6):
+def _finite_difference(function, value, epsilon=1.0e-6):
     base = np.asarray(value, dtype=float)
     result0 = np.asarray(function(base), dtype=float)
     jacobian = np.zeros((result0.size, base.size))
@@ -49,10 +49,10 @@ def test_model_shapes_and_jacobians(model_data, model_class, x, p):
     assert model.g1x(x, p, u).shape == (model.Ny, model.Nx)
     assert model.g1p(x, p, u).shape == (model.Ny, model.Np)
 
-    fd_f_x = finite_difference(lambda trial: model.f0(trial, p, u), x)
-    fd_f_p = finite_difference(lambda trial: model.f0(x, trial, u), p)
-    fd_g_x = finite_difference(lambda trial: model.g0(trial, p, u), x)
-    fd_g_p = finite_difference(lambda trial: model.g0(x, trial, u), p)
+    fd_f_x = _finite_difference(lambda trial: model.f0(trial, p, u), x)
+    fd_f_p = _finite_difference(lambda trial: model.f0(x, trial, u), p)
+    fd_g_x = _finite_difference(lambda trial: model.g0(trial, p, u), x)
+    fd_g_p = _finite_difference(lambda trial: model.g0(x, trial, u), p)
 
     np.testing.assert_allclose(model.f1x(x, p, u), fd_f_x, rtol=1e-5, atol=1e-7)
     np.testing.assert_allclose(model.f1p(x, p, u), fd_f_p, rtol=2e-4, atol=1e-7)
