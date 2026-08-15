@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+import math
 from typing import Any, ClassVar
 
 from beast.cell_models.base import CellModel
@@ -31,11 +32,21 @@ class Estimator(ABC):
             raise TypeError(
                 "objCellModel must be an instance of CellModel"
             )
+    
+        try:
+            deltat = float(DeltaT)
+        except (TypeError, ValueError) as exc:
+            raise TypeError(
+                "DeltaT must be a real number"
+            ) from exc
+
+        if not math.isfinite(deltat) or deltat <= 0.0:
+            raise ValueError(
+                "DeltaT must be positive and finite"
+            )
         
         self.objModel = objCellModel
         self.deltat = float(DeltaT)
-        if self.deltat <= 0.0:
-            raise ValueError("DeltaT must be positive")
         self.Nx = objCellModel.Nx
         self.Np = objCellModel.Np
         self.Nu = objCellModel.Nu
