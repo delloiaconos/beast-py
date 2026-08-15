@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from best04.io.binary import (
+from beast.io.binary import (
     read_float64_matrix,
     read_float64_matrix_with_n_columns,
     write_float64_matrix,
