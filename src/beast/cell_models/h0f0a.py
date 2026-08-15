@@ -30,7 +30,7 @@ class CellModel_H0F0A(CellModel):
     def f0(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Evaluate the discrete state transition."""
 
-        x = self._state(xold)
+        x = self.state(xold)
         _ = self._parameters(pold)
         u = self._input(uold)
 
@@ -39,7 +39,7 @@ class CellModel_H0F0A(CellModel):
     def g0(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Evaluate terminal voltage for the supplied state and input."""
 
-        x = self._state(xold)
+        x = self.state(xold)
         p = self._parameters(pold)
         u = self._input(uold)
 
@@ -48,7 +48,7 @@ class CellModel_H0F0A(CellModel):
     def f1x(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Return the state-transition Jacobian with respect to state."""
 
-        _ = self._state(xold) 
+        _ = self.state(xold) 
         _ = self._parameters(pold) 
         _ = self._input(uold)
         
@@ -57,7 +57,7 @@ class CellModel_H0F0A(CellModel):
     def f1p(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Return the state-transition Jacobian with respect to parameters."""
 
-        _ = self._state(xold)
+        _ = self.state(xold)
         _ = self._parameters(pold)
         _ = self._input(uold)
 
@@ -66,7 +66,7 @@ class CellModel_H0F0A(CellModel):
     def g1x(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Return the output Jacobian with respect to state."""
 
-        x = self._state(xold)
+        x = self.state(xold)
         _ = self._parameters(pold)
         _ = self._input(uold)
         
@@ -75,7 +75,7 @@ class CellModel_H0F0A(CellModel):
     def g1p(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Return the output Jacobian with respect to parameters."""
         
-        _ = self._state(xold)
+        _ = self.state(xold)
         _ =  self._parameters(pold)
         u = self._input(uold)
 

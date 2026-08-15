@@ -20,7 +20,7 @@ class Estimator_MixAlgorithm(Estimator):
 
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:
         """Set initial state, parameters, gains, and sample metadata."""
-        self.xPold = self._state(x0)
+        self.xPold = self.state(x0)
         self.pPold = self._parameters(p0)
         self._input(uold)
         self._measurement(yXPold)

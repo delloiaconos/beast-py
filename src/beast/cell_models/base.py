@@ -92,7 +92,7 @@ class CellModel(ABC):
 
         return type(self).__name__.removeprefix("CellModel_")
 
-    def _state(self, value: Any) -> FloatArray:
+    def state(self, value: Any) -> FloatArray:
         vector = as_float_vector(value, name="state")
         if vector.size != self.Nx:
             raise ValueError(f"state must have length {self.Nx}, got {vector.size}")
