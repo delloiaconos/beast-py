@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 
 from beast.cell_models.base import CellModel
-from beast.arrays import FloatArray, as_float_vector
+from beast.core.arrays import FloatArray, as_float_vector
 
 
 class CellModel_H0F0A(CellModel):
