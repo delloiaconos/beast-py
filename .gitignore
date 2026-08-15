@@ -220,3 +220,4 @@ __marimo__/
 # Temporary and backup files
 *.tmp
 *.bck
+*.bak
