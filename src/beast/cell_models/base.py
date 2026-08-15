@@ -136,7 +136,7 @@ class CellModel(ABC):
         """Return the Jacobian of :meth:`g0` with respect to parameters."""
 
     @classmethod
-    def coerce_state_compatibility(cls, state: Any) -> FloatArray:
+    def coerce_state(cls, state: Any) -> FloatArray:
         """Clamp state of charge to the physically valid interval ``[0, 1]``."""
 
         result = as_float_vector(state, name="state")

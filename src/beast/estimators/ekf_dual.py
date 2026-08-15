@@ -91,7 +91,7 @@ class Estimator_EKFdual(Estimator):
 
         # (3) State estimate time update.
         xMnew = model.f0(self.xPold, pMnew, self.uold, self.deltat)
-        xMnew = model.coerce_state_compatibility(xMnew)
+        xMnew = model.coerce_state(xMnew)
 
         # (4) State covariance time update.
         f1xold = model.f1x(self.xPold, pMnew, self.uold, self.deltat)
@@ -105,7 +105,7 @@ class Estimator_EKFdual(Estimator):
         # (6) State measurement update.
         g0new = model.g0(xMnew, pMnew, u_new, self.deltat)
         innovation = y_new - g0new
-        xPnew = model.coerce_state_compatibility(xMnew + Lxnew @ innovation)
+        xPnew = model.coerce_state(xMnew + Lxnew @ innovation)
 
         # (7) State covariance measurement update.
         sxPnew = (self.eyeNx - Lxnew @ g1xnew) @ sxMnew

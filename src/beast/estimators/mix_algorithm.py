@@ -41,6 +41,6 @@ class Estimator_MixAlgorithm(Estimator):
         model = self.objModel
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)
         g0new = model.g0(xMnew, self.pPold, u_new, self.deltat)
-        xPnew = model.coerce_state_compatibility(xMnew + self.Lxold @ (y_new - g0new))
+        xPnew = model.coerce_state(xMnew + self.Lxold @ (y_new - g0new))
         self.xPold = xPnew
         self.told = float(tnew)
