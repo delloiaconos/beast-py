@@ -1,0 +1,6 @@
+include README.md
+recursive-include docs *.md *.html
+recursive-include examples *.py
+recursive-include tests *.py
+
+include src/beast/py.typed
