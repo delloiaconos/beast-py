@@ -218,7 +218,7 @@ For new development:
 - use two-dimensional NumPy arrays for matrices, Jacobians, covariance matrices, and histories;
 - use dictionaries for named configuration and result groups;
 - avoid introducing new MATLAB-style container classes into numerical code;
-- keep legacy dataclasses in `beast.types` only as compatibility adapters;
+- keep legacy dataclasses in `beast.core.types` only as compatibility adapters;
 - normalize compatibility objects before numerical processing begins.
 
 The numerical modules should not depend on the legacy dataclasses.
@@ -226,13 +226,13 @@ The numerical modules should not depend on the legacy dataclasses.
 The most important supporting modules are:
 
 ```text
-beast.arrays
+beast.core.arrays
     NumPy conversion, shape validation, scalar extraction, and field access.
 
-beast.data
+beast.core.data
     Construction and validation of plain dictionaries used by the framework.
 
-beast.types
+beast.core.types
     Legacy MATLAB-shaped compatibility adapters.
 ```
 
@@ -333,7 +333,7 @@ When adding an estimator:
 1. Derive from or follow the estimator base interface.
 2. Keep estimator state internal only where it is genuinely algorithmic state.
 3. Accept NumPy arrays and plain dictionary data at public numerical boundaries.
-4. Avoid depending on `beast.types` compatibility dataclasses.
+4. Avoid depending on `beast.core.types` compatibility dataclasses.
 5. Add the estimator to `estimators/__init__.py` when public.
 6. Update `estimators/factory.py` when selector-based construction is required.
 7. Add initialization tests.
