@@ -98,7 +98,7 @@ class CellModel(ABC):
             raise ValueError(f"state must have length {self.Nx}, got {vector.size}")
         return vector
 
-    def _parameters(self, value: Any) -> FloatArray:
+    def parameters(self, value: Any) -> FloatArray:
         vector = as_float_vector(value, name="parameters")
         if vector.size != self.Np:
             raise ValueError(f"parameters must have length {self.Np}, got {vector.size}")

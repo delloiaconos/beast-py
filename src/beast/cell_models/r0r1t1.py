@@ -27,7 +27,7 @@ class CellModel_R0R1T1(CellModel):
 
     def f0(self, xold: Any, pold: Any, uold: Any, deltat: float | None = None) -> FloatArray:
         """Evaluate the discrete state transition."""
-        x = self.state(xold); p = self._parameters(pold); u = self._input(uold)
+        x = self.state(xold); p = self.parameters(pold); u = self._input(uold)
         alpha = self._alpha(p)
         return np.array(
             [
@@ -41,7 +41,7 @@ class CellModel_R0R1T1(CellModel):
         """Evaluate terminal voltage for the supplied state and input."""
 
         x = self.state(xold)
-        p = self._parameters(pold)
+        p = self.parameters(pold)
         u = self._input(uold)
 
         return np.array(
@@ -53,7 +53,7 @@ class CellModel_R0R1T1(CellModel):
         """Return the state-transition Jacobian with respect to state."""
 
         _ = self.state(xold)
-        p = self._parameters(pold)
+        p = self.parameters(pold)
         _ = self._input(uold)
 
         return np.array([[1.0, 0.0], [0.0, self._alpha(p)]], dtype=np.float64)
@@ -62,7 +62,7 @@ class CellModel_R0R1T1(CellModel):
         """Return the state-transition Jacobian with respect to parameters."""
 
         x = self.state(xold)
-        p = self._parameters(pold)
+        p = self.parameters(pold)
         u = self._input(uold)
 
         alpha = self._alpha(p)
@@ -76,7 +76,7 @@ class CellModel_R0R1T1(CellModel):
         """Return the output Jacobian with respect to state."""
 
         x = self.state(xold)
-        _ = self._parameters(pold)
+        _ = self.parameters(pold)
         _ = self._input(uold)
         
         return np.array([[self._interp(self.lutocv1, x[0]), 1.0]], dtype=np.float64)
@@ -85,7 +85,7 @@ class CellModel_R0R1T1(CellModel):
         """Return the output Jacobian with respect to parameters."""
         
         _ = self.state(xold)
-        _ = self._parameters(pold)
+        _ = self.parameters(pold)
         u = self._input(uold)
 
         return np.array([[-u[0], 0.0, 0.0]], dtype=np.float64)

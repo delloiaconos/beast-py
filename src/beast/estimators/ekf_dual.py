@@ -63,7 +63,7 @@ class Estimator_EKFdual(Estimator):
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:
         """Set initial state, parameters, gains, and sample metadata."""
         x = self.state(x0)
-        p = self._parameters(p0)
+        p = self.parameters(p0)
         u = self._input(uold)
         self._measurement(yXPold)
         self.told = float(told)
