@@ -27,5 +27,5 @@ class Estimator_OpenLoop(Estimator):
         u_new = self._input(unew)
         self._measurement(yXPnew)
         xPnew = self.objModel.f0(self.xPold, self.pPold, u_new, self.deltat)
-        self.xPold = self.objModel.CoerceStateCompatibility(xPnew)
+        self.xPold = self.objModel.coerce_state_compatibility(xPnew)
         self.told = float(tnew)

@@ -156,13 +156,7 @@ class CellModel(ABC):
     @abstractmethod
     def coerce_parameters(cls, parameters: Any) -> FloatArray:
         """Project parameters onto the model's admissible domain."""
-
-    @classmethod
-    def CoerceStateCompatibility(cls, xx: Any) -> FloatArray:
-        """MATLAB-compatible alias for :meth:`coerce_state_compatibility`."""
-
-        return cls.coerce_state_compatibility(xx)
-
+        
     @classmethod
     def CoerceParsCompatibility(cls, pp: Any) -> FloatArray:
         """MATLAB-compatible alias for :meth:`coerce_parameters`."""

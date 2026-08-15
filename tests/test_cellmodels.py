@@ -65,9 +65,9 @@ def test_soc_is_clipped(model_class, x, p):
     high = x.copy(); high[0] = 1.5
     low = x.copy(); low[0] = -0.5
     with pytest.warns(RuntimeWarning):
-        assert model_class.CoerceStateCompatibility(high)[0] == 1.0
+        assert model_class.coerce_state_compatibility(high)[0] == 1.0
     with pytest.warns(RuntimeWarning):
-        assert model_class.CoerceStateCompatibility(low)[0] == 0.0
+        assert model_class.coerce_state_compatibility(low)[0] == 0.0
 
 
 def test_parameter_coercion_repairs_matlab_static_method_bug():

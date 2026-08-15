@@ -41,7 +41,7 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)
         g0new = model.g0(xMnew, self.pPold, u_new, self.deltat)
         error = y_new - g0new
-        xPnew = model.CoerceStateCompatibility(xMnew + self.Lxold @ error)
+        xPnew = model.coerce_state_compatibility(xMnew + self.Lxold @ error)
 
         parameter_gain = self.Lpold
         if parameter_gain.size not in (1, self.Np):
