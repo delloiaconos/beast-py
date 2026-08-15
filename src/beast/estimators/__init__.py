@@ -6,11 +6,12 @@ from beast.estimators.enhanced_mix_algorithm import Estimator_EnhancedMixAlgorit
 from beast.estimators.mix_algorithm import Estimator_MixAlgorithm
 from beast.estimators.open_loop import Estimator_OpenLoop
 
-from beast.estimators.factory import ESTIMATOR_REGISTRY, createEstimator
+from beast.estimators.factory import ESTIMATOR_REGISTRY, createEstimator, selectEstimator
 
 __all__ = [
     "ESTIMATOR_REGISTRY", 
     "createEstimator",
+    "selectEstimator",
     "Estimator",
     "Estimator_EKFdual",
     "Estimator_EnhancedMixAlgorithm",

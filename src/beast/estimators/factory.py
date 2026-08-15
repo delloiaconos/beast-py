@@ -6,6 +6,8 @@ from typing import TypeAlias
 
 from beast.cell_models.base import CellModel
 
+from beast.cell_models.factory import CELL_MODEL_REGISTRY
+from beast.cell_models.factory import CELL_MODEL_REGISTRY
 from beast.estimators.base import Estimator
 from beast.estimators.ekf_dual import Estimator_EKFdual
 from beast.estimators.enhanced_mix_algorithm import Estimator_EnhancedMixAlgorithm
@@ -21,20 +23,31 @@ ESTIMATOR_REGISTRY: dict[str, EstimatorClass] = {
     "OPENLOOP": Estimator_OpenLoop,
 }
 
+
+def selectEstimator(selector: str) -> EstimatorClass:
+    """Return the estimator class selected by a MATLAB-style name.
+
+    Raises:
+        ValueError: If no converted estimator matches the selector.
+    """
+
+    normalized = selector.strip().upper()
+    if normalized.startswith("ESTIMATOR_"):
+        normalized = normalized.removeprefix("ESTIMATOR_")
+    try:
+        return ESTIMATOR_REGISTRY[normalized]
+    except KeyError as exc:
+        choices = ", ".join(sorted(ESTIMATOR_REGISTRY))
+        raise ValueError(f"Unknown estimator {selector!r}; choose one of {choices}") from exc
+
+
 def createEstimator(
     selector: str,
     cell_model: CellModel,
     delta_t: float,
 ) -> Estimator:
-    """Instantiate an estimator selected by its legacy token."""
+    """Select an estimator selected by its legacy token."""
 
-    normalized = selector.strip().upper().replace("_", "")
-    if normalized.startswith("ESTIMATOR"):
-        normalized = normalized.removeprefix("ESTIMATOR")
-    
-    try:
-        estimator_class = ESTIMATOR_REGISTRY[normalized]
-    except KeyError as exc:
-        choices = ", ".join(sorted(ESTIMATOR_REGISTRY))
-        raise ValueError(f"Unknown estimator {selector!r}; choose one of {choices}") from exc
+    estimator_class = selectEstimator(selector)
+
     return estimator_class(cell_model, delta_t)
