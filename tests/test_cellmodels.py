@@ -38,7 +38,7 @@ def _finite_difference(function, value, epsilon=1.0e-6):
 
 
 @pytest.mark.parametrize("model_class,x,p", CASES)
-def test_model_shapes_and_jacobians(model_data, model_class, x, p):
+def test_cellmodels_shapes_and_jacobians(model_data, model_class, x, p):
     model = model_class(model_data, covariance_for(model_class), 1.0)
     u = np.array([1.5])
 
@@ -61,7 +61,7 @@ def test_model_shapes_and_jacobians(model_data, model_class, x, p):
 
 
 @pytest.mark.parametrize("model_class,x,p", CASES)
-def test_soc_is_clipped(model_class, x, p):
+def test_cellmodels_soc_is_clipped(model_class, x, p):
     high = x.copy(); high[0] = 1.5
     low = x.copy(); low[0] = -0.5
     with pytest.warns(RuntimeWarning):
@@ -70,7 +70,7 @@ def test_soc_is_clipped(model_class, x, p):
         assert model_class.coerce_state(low)[0] == 0.0
 
 
-def test_parameter_coercion_repairs_matlab_static_method_bug():
+def test_cellmodels_parameter_coercion():
     with pytest.warns(RuntimeWarning):
         corrected = CellModel_R0R1T1.coerce_parameters([-1.0, -2.0, -3.0])
     assert np.all(corrected > 0.0)
