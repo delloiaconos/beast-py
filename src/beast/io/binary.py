@@ -15,7 +15,7 @@ from typing import Any
 
 import numpy as np
 
-from beast.arrays import FloatArray, IntArray
+from beast.core.arrays import FloatArray, IntArray
 
 Pathish = str | PathLike[str]
 
