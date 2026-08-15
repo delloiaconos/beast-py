@@ -13,6 +13,17 @@ from beast.cell_models import (
 from conftest import covariance_for
 
 
+def _finite_difference(function, value, epsilon=1.0e-6):
+    base = np.asarray(value, dtype=float)
+    result0 = np.asarray(function(base), dtype=float)
+    jacobian = np.zeros((result0.size, base.size))
+    for index in range(base.size):
+        plus = base.copy(); plus[index] += epsilon
+        minus = base.copy(); minus[index] -= epsilon
+        jacobian[:, index] = (function(plus) - function(minus)) / (2.0 * epsilon)
+    return jacobian
+
+
 CASES = [
     (CellModel_H0F0A, np.array([0.7]), np.array([0.01])),
     (CellModel_R0A1B1, np.array([0.7, -0.02]), np.array([0.01, 0.95, -0.001])),
@@ -24,18 +35,6 @@ CASES = [
     ),
     (CellModel_R0R1T1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 20.0])),
 ]
-
-
-def _finite_difference(function, value, epsilon=1.0e-6):
-    base = np.asarray(value, dtype=float)
-    result0 = np.asarray(function(base), dtype=float)
-    jacobian = np.zeros((result0.size, base.size))
-    for index in range(base.size):
-        plus = base.copy(); plus[index] += epsilon
-        minus = base.copy(); minus[index] -= epsilon
-        jacobian[:, index] = (function(plus) - function(minus)) / (2.0 * epsilon)
-    return jacobian
-
 
 @pytest.mark.parametrize("model_class,x,p", CASES)
 def test_cellmodels_shapes_and_jacobians(model_data, model_class, x, p):
