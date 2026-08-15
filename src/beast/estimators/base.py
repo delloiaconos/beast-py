@@ -23,9 +23,15 @@ class Estimator(ABC):
             DeltaT: Positive sampling interval in seconds.
 
         Raises:
+            TypeError: If ``objCellModel`` is not a ``CellModel`` instance.
             ValueError: If ``DeltaT`` is not positive.
         """
 
+        if not isinstance(objCellModel, CellModel):
+            raise TypeError(
+                "objCellModel must be an instance of CellModel"
+            )
+        
         self.objModel = objCellModel
         self.deltat = float(DeltaT)
         if self.deltat <= 0.0:
