@@ -72,5 +72,5 @@ def test_soc_is_clipped(model_class, x, p):
 
 def test_parameter_coercion_repairs_matlab_static_method_bug():
     with pytest.warns(RuntimeWarning):
-        corrected = CellModel_R0R1T1.CoerceParsCompatibility([-1.0, -2.0, -3.0])
+        corrected = CellModel_R0R1T1.coerce_parameters([-1.0, -2.0, -3.0])
     assert np.all(corrected > 0.0)

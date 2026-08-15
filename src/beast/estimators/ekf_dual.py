@@ -120,7 +120,7 @@ class Estimator_EKFdual(Estimator):
         Lpnew = _right_solve(spMnew @ dgdpnew.T, innovation_cov_p)
 
         # (9) Parameter measurement update.
-        pPnew = model.CoerceParsCompatibility(pMnew + Lpnew @ innovation)
+        pPnew = model.coerce_parameters(pMnew + Lpnew @ innovation)
 
         # (10) Parameter covariance measurement update.
         spPnew = (self.eyeNp - Lpnew @ dgdpnew) @ spMnew

@@ -49,7 +49,7 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
                 "EnhancedMixAlgorithm parameter gain must be scalar or match Np"
             )
         correction = parameter_gain * float(error[0]) * float(np.sign(u_new[0]))
-        pPnew = model.CoerceParsCompatibility(self.pPold + correction)
+        pPnew = model.coerce_parameters(self.pPold + correction)
 
         self.told = float(tnew)
         self.pPold = pPnew

@@ -156,13 +156,7 @@ class CellModel(ABC):
     @abstractmethod
     def coerce_parameters(cls, parameters: Any) -> FloatArray:
         """Project parameters onto the model's admissible domain."""
-        
-    @classmethod
-    def CoerceParsCompatibility(cls, pp: Any) -> FloatArray:
-        """MATLAB-compatible alias for :meth:`coerce_parameters`."""
-
-        return cls.coerce_parameters(pp)
-
+    
     @classmethod
     def CheckCellModelDim(cls, data: Any) -> None:
         """Validate legacy ``x0``, ``p0``, and ``u_all`` dimensions.
