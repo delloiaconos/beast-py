@@ -54,8 +54,13 @@ class CellModel(ABC):
         self.Qnom_Ah = scalar_from(get_field(cell_model_data, "Qn_Ah"), name="Qn_Ah")
         self.Qnom = self.Qnom_Ah * 3600.0
         self.eta = scalar_from(get_field(cell_model_data, "eta"), name="eta")
+
+        if not np.isfinite(self.Qnom_Ah) or self.Qnom_Ah <= 0:
+            raise ValueError("Qn_Ah must be a positive finite value")
+        
         if self.Qnom <= 0.0:
             raise ValueError("Qn_Ah must be positive")
+        
         if not np.isfinite(self.eta):
             raise ValueError("eta must be finite")
 
