@@ -7,3 +7,6 @@ developing, testing, and evaluating battery management system algorithms.
 The framework uses Python-native data structures, NumPy arrays, and modular
 components to support research, simulation, and algorithm development.
 """
+
+from beast.cell_models import (
+    CellModel )
