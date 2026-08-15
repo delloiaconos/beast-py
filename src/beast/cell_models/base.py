@@ -158,7 +158,7 @@ class CellModel(ABC):
         """Project parameters onto the model's admissible domain."""
     
     @classmethod
-    def CheckCellModelDim(cls, data: Any) -> None:
+    def check_dimensions(cls, data: Any) -> None:
         """Validate legacy ``x0``, ``p0``, and ``u_all`` dimensions.
 
         Args:
@@ -177,8 +177,6 @@ class CellModel(ABC):
             raise ValueError(f"p0 must have length {cls.Np}, got {p0.size}")
         if u_all.shape[0] != cls.Nu:
             raise ValueError(f"u_all must have {cls.Nu} rows, got {u_all.shape[0]}")
-
-    CellModelDimCheck = CheckCellModelDim
 
 
 
