@@ -21,7 +21,7 @@ def test_generator_pulse_implements_profile_generator(generator):
     assert isinstance(generator, Generator)
 
 
-def test_generator_pulse_discharge_pulses(generator):
+def test_generator_pulse_simeple_pulses(generator):
     t_all, v_all = generator.generate()
 
     np.testing.assert_array_equal(t_all, np.arange(10, dtype=np.float64))
@@ -31,3 +31,32 @@ def test_generator_pulse_discharge_pulses(generator):
     )
 
 
+@pytest.mark.parametrize("name", ["v_high", "v_low", "t_high", "t_low"])
+@pytest.mark.parametrize("value", [None, np.nan, np.inf, -np.inf])
+def test_generator_pulse_parameters_are_validated(name, value):
+    kwargs = {
+        "v_high": 1.0,
+        "v_low": -1.0,
+        "t_high": 1.0,
+        "t_low": 1.0,
+    }
+    kwargs[name] = value
+
+    with pytest.raises(ValueError):
+        Generator_Pulse(**kwargs)
+
+
+
+@pytest.mark.parametrize("name", ["t_high", "t_low"])
+@pytest.mark.parametrize("value", [None, np.nan, np.inf, -np.inf, -1.0, -10.0, 0.0])
+def test_generator_pulse_times_are_validated(name, value):
+    kwargs = {
+        "v_high": 1.0,
+        "v_low": -1.0,
+        "t_high": 1.0,
+        "t_low": 1.0,
+    }
+    kwargs[name] = value
+
+    with pytest.raises(ValueError):
+        Generator_Pulse(**kwargs)
