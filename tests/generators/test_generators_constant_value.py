@@ -6,7 +6,7 @@ import pytest
 from beast.generators import Generator_ConstantValue, Generator
 
 
-def test_generator_constant_value_implements_profile_generator():
+def test_generator_constant_value_implements_generator():
     generator = Generator_ConstantValue(2.5)
     assert isinstance(generator, Generator)
 
