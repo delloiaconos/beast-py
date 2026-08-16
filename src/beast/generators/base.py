@@ -25,7 +25,12 @@ class Generator(ABC):
         self._t_start = validate_nonnegative_finite(t_start, "t_start")
         self._t_stop = validate_positive(t_stop, "t_stop")
 
-        if delta_t >= (t_stop - t_start):
+        validate_positive_finite(delta_t, "delta_t")
+
+        if  np.isfinite(t_stop) and t_stop <= t_start:
+            raise ValueError("t_stop must be greater than t_start")
+    
+        if np.isfinite(t_stop) and delta_t >= (t_stop - t_start):
             raise ValueError("delta_t must be less than (t_stop - t_start)")
     
         if Ng < 1:

@@ -13,6 +13,9 @@ from numpy.typing import NDArray
 
 def validate_is_float( value: Any, name: str) -> float:
     """Return *value* as ``float`` if it is a float or can be converted to a float."""
+    if value is None or np.isnan(value):
+        raise ValueError(f"{name} must not be None or NaN!")
+
     try:
         result = float(value)
     except (TypeError, ValueError):
