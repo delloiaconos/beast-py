@@ -68,6 +68,7 @@ Useful variants:
 
 ```bash
 python -m pytest -v
+python -m pytest -v --exitfirst
 python -m pytest -x
 python -m pytest tests/test_cellmodels.py
 python -m pytest -k estimator
