@@ -2,15 +2,16 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+from conftest import covariance_for
 
 from beast.cell_models import (
+    CellModel_ESC,
     CellModel_H0F0A,
     CellModel_R0A1B1,
     CellModel_R0R1C1,
     CellModel_R0R1C1R2C2,
     CellModel_R0R1T1,
 )
-from conftest import covariance_for
 
 
 def _finite_difference(function, value, epsilon=1.0e-6):
@@ -34,8 +35,9 @@ CASES = [
         np.array([0.01, 0.02, 1000.0, 0.03, 2000.0]),
     ),
     (CellModel_R0R1T1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 20.0])),
+    (CellModel_ESC, np.array([0.7, 0.1, 1.0, -0.02]), np.array([0.15, 0.05, 1000.0, 1.2, 0.05, 0.01])),
 ]
-
+    
 @pytest.mark.parametrize("model_class,x,p", CASES)
 def test_cellmodels_shapes_and_jacobians(model_data, model_class, x, p):
     model = model_class(model_data, covariance_for(model_class), 1.0)
@@ -73,3 +75,7 @@ def test_cellmodels_parameter_coercion():
     with pytest.warns(RuntimeWarning):
         corrected = CellModel_R0R1T1.coerce_parameters([-1.0, -2.0, -3.0])
     assert np.all(corrected > 0.0)
+
+    with pytest.warns(RuntimeWarning):
+        corrected_esc = CellModel_ESC.coerce_parameters([-0.1, -0.1, -100.0, -1.0, -0.1, -0.1])
+    assert np.all(corrected_esc > 0.0)
