@@ -181,6 +181,12 @@ Model tests should cover dimensions, state/output equations, invalid inputs, sta
 
 Built-in estimators derive from `beast.estimators.Estimator`.
 
+Each estimator exposes an `ExportableVars` tuple containing
+`ExposrtableVars` records. The records use the same schema as MATLAB:
+`ClassVar`, `Size`, `ExportName`, `Save`, and `FunctionHandler`. Build this
+metadata through `_exportable_vars()` so model-dependent dimensions such as
+`Nx` and `Np` are stored as concrete integers.
+
 The current registry supports:
 
 - `EKFDUAL`;
