@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import Any
 import warnings
 
 import numpy as np
 
 from beast.cell_models.base import CellModel
-from beast.estimators.base import Estimator
+from beast.estimators.base import Estimator, ExposrtableVars
 
 
 def _right_solve(numerator: np.ndarray, denominator: np.ndarray) -> np.ndarray:
@@ -25,6 +25,12 @@ def _right_solve(numerator: np.ndarray, denominator: np.ndarray) -> np.ndarray:
         return numerator @ np.linalg.pinv(denominator)
 
 
+def _first_element(value: Any) -> Any:
+    """Return the first flattened element of an exported value."""
+
+    return np.asarray(value).reshape(-1)[0]
+
+
 class Estimator_EKFdual(Estimator):
     """Dual EKF that estimates cell state and model parameters in sequence.
 
@@ -33,14 +39,17 @@ class Estimator_EKFdual(Estimator):
     repaired here.  The fixed model sampling interval is still used.
     """
 
-    AvailablesVars: ClassVar[tuple[str, ...]] = (
-        "xPold",
-        "pPold",
-        "Lxold",
-        "Lpold",
-        "spPold",
-        "sxPold",
-    )
+    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+        return (
+            ExposrtableVars("xPold", self.Nx, "xP_all", True),
+            ExposrtableVars("pPold", self.Np, "pP_all", True),
+            ExposrtableVars("Lxold", self.Nx, "Lx_all", True),
+            ExposrtableVars("Lpold", self.Np, "Lp_all", True),
+            ExposrtableVars("sxPold", self.Nx, "sxP_all", True, np.diag),
+            ExposrtableVars("spPold", self.Np, "spP_all", True, np.diag),
+            ExposrtableVars("dyold", 1, "dy_all", True),
+            ExposrtableVars("xPold", 1, "SoC", True, _first_element),
+        )
 
     def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
         """Initialize zero-valued covariance, sensitivity, and gain matrices.
@@ -62,10 +71,10 @@ class Estimator_EKFdual(Estimator):
 
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:
         """Set initial state, parameters, gains, and sample metadata."""
-        x = self.state(x0)
-        p = self.parameters(p0)
-        u = self.input(uold)
-        self._measurement(yXPold)
+        x = self._state(x0)
+        p = self._parameters(p0)
+        u = self._input(uold)
+        y_measured = self._measurement(yXPold)
         self.told = float(told)
         self.uold = u
         self.xPold = x
@@ -74,13 +83,14 @@ class Estimator_EKFdual(Estimator):
         # The MATLAB implementation deliberately replaces the first measured
         # output with the model-predicted value.
         self.yXPold = self.objModel.g0(x, p, u, self.deltat)
+        self.dyold = y_measured - self.yXPold
         self._initialized = True
 
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
         model = self.objModel
-        u_new = self.input(unew)
+        u_new = self._input(unew)
         y_new = self._measurement(yXPnew)
 
         # (1) Parameter estimate time update.
@@ -136,3 +146,4 @@ class Estimator_EKFdual(Estimator):
         self.Lpold = Lpnew
         self.dxMdpold = dxMdpnew
         self.dgdpold = dgdpnew
+        self.dyold = innovation

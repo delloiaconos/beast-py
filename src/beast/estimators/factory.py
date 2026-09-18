@@ -7,7 +7,6 @@ from typing import TypeAlias
 from beast.cell_models.base import CellModel
 
 from beast.cell_models.factory import CELL_MODEL_REGISTRY
-from beast.cell_models.factory import CELL_MODEL_REGISTRY
 from beast.estimators.base import Estimator
 from beast.estimators.ekf_dual import Estimator_EKFdual
 from beast.estimators.enhanced_mix_algorithm import Estimator_EnhancedMixAlgorithm

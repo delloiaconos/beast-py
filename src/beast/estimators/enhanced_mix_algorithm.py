@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import Any
 
 import numpy as np
 
-from beast.estimators.base import Estimator
+from beast.estimators.base import Estimator, ExposrtableVars
 
 
 class Estimator_EnhancedMixAlgorithm(Estimator):
@@ -17,13 +17,17 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
     ``diag(sxV)`` is broadcast to every parameter.
     """
 
-    AvailablesVars: ClassVar[tuple[str, ...]] = ("xPold", "pPold", "Lxold")
+    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+        return (
+            ExposrtableVars("xPold", self.Nx, "xP_all", True),
+            ExposrtableVars("pPold", self.Np, "pP_all", True),
+        )
 
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:
         """Set initial state, parameters, gains, and sample metadata."""
-        self.xPold = self.state(x0)
-        self.pPold = self.parameters(p0)
-        self.input(uold)
+        self.xPold = self._state(x0)
+        self.pPold = self._parameters(p0)
+        self._input(uold)
         self._measurement(yXPold)
         self.told = float(told)
         if self.Ny != 1:
@@ -35,7 +39,7 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
-        u_new = self.input(unew)
+        u_new = self._input(unew)
         y_new = self._measurement(yXPnew)
         model = self.objModel
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)

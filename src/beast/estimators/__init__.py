@@ -1,6 +1,6 @@
 """Estimator algorithms."""
 
-from beast.estimators.base import Estimator
+from beast.estimators.base import Estimator, ExposrtableVars
 from beast.estimators.ekf_dual import Estimator_EKFdual
 from beast.estimators.enhanced_mix_algorithm import Estimator_EnhancedMixAlgorithm
 from beast.estimators.mix_algorithm import Estimator_MixAlgorithm
@@ -13,6 +13,7 @@ __all__ = [
     "createEstimator",
     "selectEstimator",
     "Estimator",
+    "ExposrtableVars",
     "Estimator_EKFdual",
     "Estimator_EnhancedMixAlgorithm",
     "Estimator_MixAlgorithm",

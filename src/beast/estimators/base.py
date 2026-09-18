@@ -4,17 +4,46 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 import math
-from typing import Any, ClassVar
+from dataclasses import dataclass
+from typing import Any, Callable
 
 from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
+
+
+@dataclass(frozen=True, slots=True)
+class ExposrtableVars:
+    """Metadata describing values exported by estimators.
+
+    Describe one estimator member that can be saved or exported.
+    ``FunctionHandler`` must be applied during export when the stored member must be
+    reduced or reshaped to the declared ``Size``.
+    """
+
+    ClassVar: str
+    Size: int
+    ExportName: str
+    Save: bool
+    FunctionHandler: Callable[[Any], Any] | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.ClassVar, str) or not self.ClassVar:
+            raise ValueError("ClassVar must be a non-empty string")
+        if isinstance(self.Size, bool) or not isinstance(self.Size, int) or self.Size < 0:
+            raise ValueError("Size must be a non-negative integer")
+        if not isinstance(self.ExportName, str):
+            raise TypeError("ExportName must be a string")
+        if not isinstance(self.Save, bool):
+            raise TypeError("Save must be a bool")
+        if self.FunctionHandler is not None and not callable(self.FunctionHandler):
+            raise TypeError("FunctionHandler must be callable or None")
 
 
 class Estimator(ABC):
     """Base class for state and parameter estimators.
     """
 
-    AvailablesVars: ClassVar[tuple[str, ...]] = ()
+    ExportableVars: tuple[ExposrtableVars, ...]
 
     def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
         """Store the model interface and fixed estimator sampling interval.
@@ -52,12 +81,18 @@ class Estimator(ABC):
         self.Nu = objCellModel.Nu
         self.Ny = objCellModel.Ny
         self._initialized = False
+        self.ExportableVars = self._exportable_vars()
+
+    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+        """Build export metadata after model-dependent dimensions are known."""
+
+        return ()
 
     @property
-    def available_variables(self) -> tuple[str, ...]:
-        """Names of histories that the processing loop should collect."""
+    def exportable_variables(self) -> tuple[ExposrtableVars, ...]:
+        """Metadata for estimator members exposed to processing loops."""
 
-        return self.AvailablesVars
+        return self.ExportableVars
 
     def _state(self, value: Any) -> FloatArray:
         result = as_float_vector(value, name="x0")
