@@ -30,6 +30,6 @@ class Estimator_OpenLoop(Estimator):
         self._require_initialized()
         u_new = self._input(unew)
         self._measurement(yXPnew)
-        xPnew = self.objModel.f0(self.xPold, self.pPold, u_new, self.deltat)
-        self.xPold = self.objModel.coerce_state(xPnew)
+        xPnew = self.objCell.f0(self.xPold, self.pPold, u_new, self.deltat)
+        self.xPold = self.objCell.coerce_state(xPnew)
         self.told = float(tnew)

@@ -82,14 +82,14 @@ class Estimator_EKFdual(Estimator):
 
         # The MATLAB implementation deliberately replaces the first measured
         # output with the model-predicted value.
-        self.yXPold = self.objModel.g0(x, p, u, self.deltat)
+        self.yXPold = self.objCell.g0(x, p, u, self.deltat)
         self.dyold = y_measured - self.yXPold
         self._initialized = True
 
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
         """Advance the estimator by one input/measurement sample."""
         self._require_initialized()
-        model = self.objModel
+        model = self.objCell
         u_new = self._input(unew)
         y_new = self._measurement(yXPnew)
 

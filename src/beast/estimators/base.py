@@ -74,7 +74,7 @@ class Estimator(ABC):
                 "DeltaT must be positive and finite"
             )
         
-        self.objModel = objCellModel
+        self.objCell = objCellModel
         self.deltat = float(DeltaT)
         self.Nx = objCellModel.Nx
         self.Np = objCellModel.Np

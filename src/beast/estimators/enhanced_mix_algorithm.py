@@ -32,8 +32,8 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
         self.told = float(told)
         if self.Ny != 1:
             raise NotImplementedError("The original EnhancedMixAlgorithm supports Ny=1 only")
-        self.Lxold = (1.0e5 * np.diag(self.objModel.sxW)).reshape(self.Nx, 1)
-        self.Lpold = 1.0e5 * np.diag(self.objModel.sxV)
+        self.Lxold = (1.0e5 * np.diag(self.objCell.sxW)).reshape(self.Nx, 1)
+        self.Lpold = 1.0e5 * np.diag(self.objCell.sxV)
         self._initialized = True
 
     def step(self, unew: Any, yXPnew: Any, tnew: float) -> None:
@@ -41,7 +41,7 @@ class Estimator_EnhancedMixAlgorithm(Estimator):
         self._require_initialized()
         u_new = self._input(unew)
         y_new = self._measurement(yXPnew)
-        model = self.objModel
+        model = self.objCell
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)
         g0new = model.g0(xMnew, self.pPold, u_new, self.deltat)
         error = y_new - g0new

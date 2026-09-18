@@ -30,7 +30,7 @@ class Estimator_MixAlgorithm(Estimator):
         self._input(uold)
         self._measurement(yXPold)
         self.told = float(told)
-        diagonal = np.diag(self.objModel.sxW)
+        diagonal = np.diag(self.objCell.sxW)
         if diagonal.size != self.Nx:
             raise ValueError("sxW diagonal length must equal the number of states")
         self.Lxold = (1.0e5 * diagonal).reshape(self.Nx, 1)
@@ -43,7 +43,7 @@ class Estimator_MixAlgorithm(Estimator):
         self._require_initialized()
         u_new = self._input(unew)
         y_new = self._measurement(yXPnew)
-        model = self.objModel
+        model = self.objCell
         xMnew = model.f0(self.xPold, self.pPold, u_new, self.deltat)
         g0new = model.g0(xMnew, self.pPold, u_new, self.deltat)
         xPnew = model.coerce_state(xMnew + self.Lxold @ (y_new - g0new))
