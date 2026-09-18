@@ -39,7 +39,7 @@ class Estimator_EKFdual(Estimator):
     repaired here.  The fixed model sampling interval is still used.
     """
 
-    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+    def _exportable_vars(self) -> list[ExposrtableVars]:
         return (
             ExposrtableVars("xPold", self.Nx, "xP_all", True),
             ExposrtableVars("pPold", self.Np, "pP_all", True),

@@ -10,7 +10,7 @@ from beast.estimators.base import Estimator, ExposrtableVars
 class Estimator_OpenLoop(Estimator):
     """Advance states using the model without measurement correction."""
 
-    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+    def _exportable_vars(self) -> list[ExposrtableVars]:
         return (
             ExposrtableVars("xPold", self.Nx, "xP_all", True),
             ExposrtableVars("pPold", self.Np, "pP_all", True),

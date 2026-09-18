@@ -43,7 +43,7 @@ class Estimator(ABC):
     """Base class for state and parameter estimators.
     """
 
-    ExportableVars: tuple[ExposrtableVars, ...]
+    ExportableVars: list[ExposrtableVars]
 
     def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
         """Store the model interface and fixed estimator sampling interval.
@@ -83,13 +83,13 @@ class Estimator(ABC):
         self._initialized = False
         self.ExportableVars = self._exportable_vars()
 
-    def _exportable_vars(self) -> tuple[ExposrtableVars, ...]:
+    def _exportable_vars(self) -> list[ExposrtableVars]:
         """Build export metadata after model-dependent dimensions are known."""
 
         return ()
 
     @property
-    def exportable_variables(self) -> tuple[ExposrtableVars, ...]:
+    def exportable_variables(self) -> list[ExposrtableVars]:
         """Metadata for estimator members exposed to processing loops."""
 
         return self.ExportableVars
