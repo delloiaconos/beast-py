@@ -1,0 +1,3 @@
+# Runtime and test dependencies for local development.
+numpy>=1.23
+pytest>=7
