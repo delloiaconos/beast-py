@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from beast.estimators.base import Estimator, ExportableVars
+from beast.estimators.estimator import Estimator, ExportableVars
 
 
 class EnhancedMixAlgorithm(Estimator):

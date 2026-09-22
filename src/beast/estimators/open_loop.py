@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from beast.estimators.base import Estimator, ExportableVars
+from beast.estimators.estimator import Estimator, ExportableVars
 
 
 class OpenLoop(Estimator):

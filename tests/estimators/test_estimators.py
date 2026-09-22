@@ -7,7 +7,7 @@ import pkgutil
 import pytest
 
 import beast.estimators as estimators_package
-from beast.estimators.base import Estimator
+from beast.estimators.estimator import Estimator
 from beast.estimators.factory import ESTIMATOR_REGISTRY
 
 def _concrete_estimator_classes() -> set[type[Estimator]]:

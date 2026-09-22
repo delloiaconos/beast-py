@@ -1,6 +1,6 @@
 """Estimator algorithms."""
 
-from beast.estimators.base import Estimator, ExportableVars
+from beast.estimators.estimator import Estimator, ExportableVars
 from beast.estimators.ekf_dual import EKFdual
 from beast.estimators.enhanced_mix_algorithm import EnhancedMixAlgorithm
 from beast.estimators.mix_algorithm import MixAlgorithm

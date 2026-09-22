@@ -11,7 +11,7 @@ import inspect
 
 import pytest
 
-from beast.estimators.base import Estimator
+from beast.estimators.estimator import Estimator
 
 
 def test_estimator_is_a_class() -> None:

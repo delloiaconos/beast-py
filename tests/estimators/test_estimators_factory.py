@@ -4,7 +4,7 @@ import inspect
 import pytest
 
 
-from beast.estimators.base import Estimator
+from beast.estimators.estimator import Estimator
 from beast.estimators.factory import createEstimator, selectEstimator, ESTIMATOR_REGISTRY
 
 from tests.helpers.cell_models import Dummy

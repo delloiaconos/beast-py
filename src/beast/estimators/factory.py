@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TypeAlias
 
-from beast.estimators.base import Estimator
+from beast.estimators.estimator import Estimator
 from beast.estimators.ekf_dual import EKFdual
 from beast.estimators.enhanced_mix_algorithm import EnhancedMixAlgorithm
 from beast.estimators.mix_algorithm import MixAlgorithm
