@@ -10,7 +10,7 @@ from beast.estimators.enhanced_mix_algorithm import EnhancedMixAlgorithm
 from beast.estimators.mix_algorithm import MixAlgorithm
 from beast.estimators.open_loop import OpenLoop
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 
 EstimatorClass: TypeAlias = type[Estimator]
 

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Any
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 
 class Dummy(CellModel):
 

@@ -11,7 +11,7 @@ import inspect
 
 import pytest
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 
 
 def test_cell_model_is_a_class() -> None:

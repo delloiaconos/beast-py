@@ -7,7 +7,7 @@ import math
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 

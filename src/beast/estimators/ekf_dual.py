@@ -7,7 +7,7 @@ import warnings
 
 import numpy as np
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 from beast.estimators.base import Estimator, ExportableVars
 
 

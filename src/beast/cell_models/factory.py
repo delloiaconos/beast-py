@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping, TypeAlias
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 from beast.cell_models.h0f0a import H0F0A
 from beast.cell_models.r0a1b1 import R0A1B1
 from beast.cell_models.r0r1a1r2a2 import R0R1A1R2A2

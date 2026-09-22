@@ -1,6 +1,6 @@
 """Battery equivalent-circuit models."""
 
-from beast.cell_models.base import CellModel
+from beast.cell_models.cell_model import CellModel
 from beast.cell_models.factory import (
     CELL_MODEL_REGISTRY,
     initCellModel,
