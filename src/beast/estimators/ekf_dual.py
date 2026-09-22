@@ -51,15 +51,15 @@ class EKFdual(Estimator):
             ExportableVars("xPold", 1, "SoC", True, _first_element),
         )
 
-    def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
+    def __init__(self, objCell: CellModel, DeltaT: float) -> None:
         """Initialize zero-valued covariance, sensitivity, and gain matrices.
 
         Args:
-            objCellModel: Battery model whose states and parameters are estimated.
+            objCell: Battery model whose states and parameters are estimated.
             DeltaT: Positive fixed sampling interval in seconds.
         """
 
-        super().__init__(objCellModel, DeltaT)
+        super().__init__(objCell, DeltaT)
         self.eyeNp = np.eye(self.Np, dtype=np.float64)
         self.eyeNx = np.eye(self.Nx, dtype=np.float64)
         self.spPold = np.zeros((self.Np, self.Np), dtype=np.float64)
