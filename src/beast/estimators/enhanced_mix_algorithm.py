@@ -7,16 +7,23 @@ from typing import Any
 import numpy as np
 
 from beast.estimators.estimator import Estimator, ExportableVars
+from beast.cell_models.cell_model import CellModel
 
 
 class EnhancedMixAlgorithm(Estimator):
     """Fixed-gain state and parameter correction algorithm.
-
-    The source explicitly notes that the parameter-gain calculation is not
-    generic.  For the converted models (all ``Ny == 1``), the scalar gain from
-    ``diag(sxV)`` is broadcast to every parameter.
     """
+    def __init__(self, objCell: CellModel, DeltaT: float) -> None:
+        """Initialize estimator.
+    
+            Args:
+                objCell: Battery model whose states and parameters are estimated.
+                DeltaT: Positive fixed sampling interval in seconds.
+        """
+    
+        super().__init__(objCell, DeltaT)
 
+    
     def _exportable_vars(self) -> list[ExportableVars]:
         return (
             ExportableVars("xPold", self.Nx, "xP_all", True),

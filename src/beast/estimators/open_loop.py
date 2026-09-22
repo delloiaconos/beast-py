@@ -5,11 +5,21 @@ from __future__ import annotations
 from typing import Any
 
 from beast.estimators.estimator import Estimator, ExportableVars
-
+from beast.cell_models.cell_model import CellModel
 
 class OpenLoop(Estimator):
     """Advance states using the model without measurement correction."""
 
+    def __init__(self, objCell: CellModel, DeltaT: float) -> None:
+        """Initialize estimator.
+    
+            Args:
+                objCell: Battery model whose states and parameters are estimated.
+                DeltaT: Positive fixed sampling interval in seconds.
+        """
+    
+        super().__init__(objCell, DeltaT)
+    
     def _exportable_vars(self) -> list[ExportableVars]:
         return (
             ExportableVars("xPold", self.Nx, "xP_all", True),

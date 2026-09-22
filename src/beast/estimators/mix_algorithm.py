@@ -7,7 +7,7 @@ from typing import Any
 import numpy as np
 
 from beast.estimators.estimator import Estimator, ExportableVars
-
+from beast.cell_models.cell_model import CellModel
 
 class MixAlgorithm(Estimator):
     """Propagate the model and correct states with a fixed diagonal gain.
@@ -15,7 +15,16 @@ class MixAlgorithm(Estimator):
     The gain is initialized to ``1e5 * diag(model.sxW)`` and never updated.
     Parameters remain fixed.
     """
-
+    def __init__(self, objCell: CellModel, DeltaT: float) -> None:
+        """Initialize estimator.
+    
+            Args:
+                objCell: Battery model whose states and parameters are estimated.
+                DeltaT: Positive fixed sampling interval in seconds.
+        """
+    
+        super().__init__(objCell, DeltaT)
+    
     def _exportable_vars(self) -> list[ExportableVars]:
         return (
             ExportableVars("xPold", self.Nx, "xP_all", True),
