@@ -38,10 +38,10 @@ from beast.cell_models import (
 from beast.estimators import (
     Estimator,
     ExposrtableVars,
-    Estimator_EKFdual,
-    Estimator_EnhancedMixAlgorithm,
-    Estimator_MixAlgorithm,
-    Estimator_OpenLoop,
+    EKFdual,
+    EnhancedMixAlgorithm,
+    MixAlgorithm,
+    OpenLoop,
     selectEstimator,
     createEstimator,
 )
@@ -66,10 +66,10 @@ __all__ = [
 
     "Estimator",
     "ExposrtableVars",
-    "Estimator_EKFdual",
-    "Estimator_EnhancedMixAlgorithm",
-    "Estimator_MixAlgorithm",
-    "Estimator_OpenLoop",
+    "EKFdual",
+    "EnhancedMixAlgorithm",
+    "MixAlgorithm",
+    "OpenLoop",
     "selectEstimator", "createEstimator",
 ]
 

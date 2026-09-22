@@ -9,7 +9,7 @@ import numpy as np
 from beast.estimators.base import Estimator, ExposrtableVars
 
 
-class Estimator_MixAlgorithm(Estimator):
+class MixAlgorithm(Estimator):
     """Propagate the model and correct states with a fixed diagonal gain.
 
     The gain is initialized to ``1e5 * diag(model.sxW)`` and never updated.

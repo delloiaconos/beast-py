@@ -9,7 +9,7 @@ import numpy as np
 from beast.estimators.base import Estimator, ExposrtableVars
 
 
-class Estimator_EnhancedMixAlgorithm(Estimator):
+class EnhancedMixAlgorithm(Estimator):
     """Fixed-gain state and parameter correction algorithm.
 
     The source explicitly notes that the parameter-gain calculation is not

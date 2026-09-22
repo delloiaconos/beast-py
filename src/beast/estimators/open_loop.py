@@ -7,7 +7,7 @@ from typing import Any
 from beast.estimators.base import Estimator, ExposrtableVars
 
 
-class Estimator_OpenLoop(Estimator):
+class OpenLoop(Estimator):
     """Advance states using the model without measurement correction."""
 
     def _exportable_vars(self) -> list[ExposrtableVars]:

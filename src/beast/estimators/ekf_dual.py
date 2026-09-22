@@ -31,7 +31,7 @@ def _first_element(value: Any) -> Any:
     return np.asarray(value).reshape(-1)[0]
 
 
-class Estimator_EKFdual(Estimator):
+class EKFdual(Estimator):
     """Dual EKF that estimates cell state and model parameters in sequence.
 
     The operation ordering follows the ten sections in the MATLAB method.  A

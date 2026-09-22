@@ -5,20 +5,20 @@ from __future__ import annotations
 from typing import TypeAlias
 
 from beast.estimators.base import Estimator
-from beast.estimators.ekf_dual import Estimator_EKFdual
-from beast.estimators.enhanced_mix_algorithm import Estimator_EnhancedMixAlgorithm
-from beast.estimators.mix_algorithm import Estimator_MixAlgorithm
-from beast.estimators.open_loop import Estimator_OpenLoop
+from beast.estimators.ekf_dual import EKFdual
+from beast.estimators.enhanced_mix_algorithm import EnhancedMixAlgorithm
+from beast.estimators.mix_algorithm import MixAlgorithm
+from beast.estimators.open_loop import OpenLoop
 
 from beast.cell_models.base import CellModel
 
 EstimatorClass: TypeAlias = type[Estimator]
 
 ESTIMATOR_REGISTRY: dict[str, EstimatorClass] = {
-    "EKFDUAL": Estimator_EKFdual,
-    "MIXALGORITHM": Estimator_MixAlgorithm,
-    "ENHANCEDMIXALGORITHM": Estimator_EnhancedMixAlgorithm,
-    "OPENLOOP": Estimator_OpenLoop,
+    "EKFDUAL": EKFdual,
+    "MIXALGORITHM": MixAlgorithm,
+    "ENHANCEDMIXALGORITHM": EnhancedMixAlgorithm,
+    "OPENLOOP": OpenLoop,
 }
 
 
