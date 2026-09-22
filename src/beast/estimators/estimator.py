@@ -45,21 +45,21 @@ class Estimator(ABC):
 
     ExportableVars: list[ExportableVars]
 
-    def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
+    def __init__(self, objCell: CellModel, DeltaT: float) -> None:
         """Store the model interface and fixed estimator sampling interval.
 
         Args:
-            objCellModel: Battery model used by the estimator.
+            objCell: Battery model used by the estimator.
             DeltaT: Positive sampling interval in seconds.
 
         Raises:
-            TypeError: If ``objCellModel`` is not a ``CellModel`` instance.
+            TypeError: If ``objCell`` is not a ``CellModel`` instance.
             ValueError: If ``DeltaT`` is not positive.
         """
 
-        if not isinstance(objCellModel, CellModel):
+        if not isinstance(objCell, CellModel):
             raise TypeError(
-                "objCellModel must be an instance of CellModel"
+                "objCell must be an instance of CellModel"
             )
     
         try:
@@ -74,12 +74,12 @@ class Estimator(ABC):
                 "DeltaT must be positive and finite"
             )
         
-        self.objCell = objCellModel
+        self.objCell = objCell
         self.deltat = float(DeltaT)
-        self.Nx = objCellModel.Nx
-        self.Np = objCellModel.Np
-        self.Nu = objCellModel.Nu
-        self.Ny = objCellModel.Ny
+        self.Nx = objCell.Nx
+        self.Np = objCell.Np
+        self.Nu = objCell.Nu
+        self.Ny = objCell.Ny
         self._initialized = False
         self.ExportableVars = self._exportable_vars()
 
