@@ -6,6 +6,7 @@ import pytest
 from beast.cell_models import (
     CellModel_H0F0A,
     CellModel_R0A1B1,
+    CellModel_R0R1A1R2A2,
     CellModel_R0R1C1,
     CellModel_R0R1C1R2C2,
     CellModel_R0R1T1,
@@ -27,6 +28,11 @@ def _finite_difference(function, value, epsilon=1.0e-6):
 CASES = [
     (CellModel_H0F0A, np.array([0.7]), np.array([0.01])),
     (CellModel_R0A1B1, np.array([0.7, -0.02]), np.array([0.01, 0.95, -0.001])),
+    (
+        CellModel_R0R1A1R2A2,
+        np.array([0.7, -0.02, -0.01]),
+        np.array([0.01, 0.02, 0.95, 0.03, 0.9]),
+    ),
     (CellModel_R0R1C1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 1000.0])),
     (
         CellModel_R0R1C1R2C2,

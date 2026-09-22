@@ -162,6 +162,7 @@ The current registry supports:
 
 - `H0F0A`;
 - `R0A1B1`;
+- `R0R1A1R2A2`;
 - `R0R1C1`;
 - `R0R1C1R2C2`;
 - `R0R1T1`.
