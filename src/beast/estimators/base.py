@@ -12,7 +12,7 @@ from beast.core.arrays import FloatArray, as_float_vector
 
 
 @dataclass(frozen=True, slots=True)
-class ExposrtableVars:
+class ExportableVars:
     """Metadata describing values exported by estimators.
 
     Describe one estimator member that can be saved or exported.
@@ -43,7 +43,7 @@ class Estimator(ABC):
     """Base class for state and parameter estimators.
     """
 
-    ExportableVars: list[ExposrtableVars]
+    ExportableVars: list[ExportableVars]
 
     def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:
         """Store the model interface and fixed estimator sampling interval.
@@ -83,13 +83,13 @@ class Estimator(ABC):
         self._initialized = False
         self.ExportableVars = self._exportable_vars()
 
-    def _exportable_vars(self) -> list[ExposrtableVars]:
+    def _exportable_vars(self) -> list[ExportableVars]:
         """Build export metadata after model-dependent dimensions are known."""
 
         return ()
 
     @property
-    def exportable_variables(self) -> list[ExposrtableVars]:
+    def exportable_variables(self) -> list[ExportableVars]:
         """Metadata for estimator members exposed to processing loops."""
 
         return self.ExportableVars

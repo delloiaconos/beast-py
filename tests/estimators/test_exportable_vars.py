@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 from beast.cell_models import R0R1C1
-from beast.estimators import ExposrtableVars, createEstimator
+from beast.estimators import ExportableVars, createEstimator
 from conftest import covariance_for
 from tests.helpers.cell_models import Dummy
 
@@ -58,7 +58,7 @@ def test_exportable_vars_match_matlab_schema(selector, expected) -> None:
 
     assert not hasattr(estimator, "AvailablesVars")
     assert estimator.exportable_variables == estimator.ExportableVars
-    assert all(isinstance(item, ExposrtableVars) for item in estimator.ExportableVars)
+    assert all(isinstance(item, ExportableVars) for item in estimator.ExportableVars)
 
     actual = [
         (
@@ -121,7 +121,7 @@ def test_exportable_members_exist_after_initialization(selector, model_data) -> 
 
 
 def test_exposrtable_vars_is_frozen() -> None:
-    metadata = ExposrtableVars("xPold", 2, "xP_all", True)
+    metadata = ExportableVars("xPold", 2, "xP_all", True)
 
     with pytest.raises(FrozenInstanceError):
         metadata.Size = 3
@@ -130,4 +130,4 @@ def test_exposrtable_vars_is_frozen() -> None:
 @pytest.mark.parametrize("invalid_size", [-1, 1.5, True])
 def test_exposrtable_vars_rejects_invalid_size(invalid_size) -> None:
     with pytest.raises(ValueError):
-        ExposrtableVars("xPold", invalid_size, "xP_all", True)
+        ExportableVars("xPold", invalid_size, "xP_all", True)

@@ -37,7 +37,7 @@ from beast.cell_models import (
 
 from beast.estimators import (
     Estimator,
-    ExposrtableVars,
+    ExportableVars,
     EKFdual,
     EnhancedMixAlgorithm,
     MixAlgorithm,
@@ -65,7 +65,7 @@ __all__ = [
     "initCellModel", "selectCellModel", "createCellModel",
 
     "Estimator",
-    "ExposrtableVars",
+    "ExportableVars",
     "EKFdual",
     "EnhancedMixAlgorithm",
     "MixAlgorithm",

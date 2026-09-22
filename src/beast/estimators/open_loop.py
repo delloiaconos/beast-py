@@ -4,16 +4,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from beast.estimators.base import Estimator, ExposrtableVars
+from beast.estimators.base import Estimator, ExportableVars
 
 
 class OpenLoop(Estimator):
     """Advance states using the model without measurement correction."""
 
-    def _exportable_vars(self) -> list[ExposrtableVars]:
+    def _exportable_vars(self) -> list[ExportableVars]:
         return (
-            ExposrtableVars("xPold", self.Nx, "xP_all", True),
-            ExposrtableVars("pPold", self.Np, "pP_all", True),
+            ExportableVars("xPold", self.Nx, "xP_all", True),
+            ExportableVars("pPold", self.Np, "pP_all", True),
         )
 
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:

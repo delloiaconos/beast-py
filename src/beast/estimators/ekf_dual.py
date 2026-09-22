@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 
 from beast.cell_models.base import CellModel
-from beast.estimators.base import Estimator, ExposrtableVars
+from beast.estimators.base import Estimator, ExportableVars
 
 
 def _right_solve(numerator: np.ndarray, denominator: np.ndarray) -> np.ndarray:
@@ -39,16 +39,16 @@ class EKFdual(Estimator):
     repaired here.  The fixed model sampling interval is still used.
     """
 
-    def _exportable_vars(self) -> list[ExposrtableVars]:
+    def _exportable_vars(self) -> list[ExportableVars]:
         return (
-            ExposrtableVars("xPold", self.Nx, "xP_all", True),
-            ExposrtableVars("pPold", self.Np, "pP_all", True),
-            ExposrtableVars("Lxold", self.Nx, "Lx_all", True),
-            ExposrtableVars("Lpold", self.Np, "Lp_all", True),
-            ExposrtableVars("sxPold", self.Nx, "sxP_all", True, np.diag),
-            ExposrtableVars("spPold", self.Np, "spP_all", True, np.diag),
-            ExposrtableVars("dyold", 1, "dy_all", True),
-            ExposrtableVars("xPold", 1, "SoC", True, _first_element),
+            ExportableVars("xPold", self.Nx, "xP_all", True),
+            ExportableVars("pPold", self.Np, "pP_all", True),
+            ExportableVars("Lxold", self.Nx, "Lx_all", True),
+            ExportableVars("Lpold", self.Np, "Lp_all", True),
+            ExportableVars("sxPold", self.Nx, "sxP_all", True, np.diag),
+            ExportableVars("spPold", self.Np, "spP_all", True, np.diag),
+            ExportableVars("dyold", 1, "dy_all", True),
+            ExportableVars("xPold", 1, "SoC", True, _first_element),
         )
 
     def __init__(self, objCellModel: CellModel, DeltaT: float) -> None:

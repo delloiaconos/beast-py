@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from beast.estimators.base import Estimator, ExposrtableVars
+from beast.estimators.base import Estimator, ExportableVars
 
 
 class MixAlgorithm(Estimator):
@@ -16,11 +16,11 @@ class MixAlgorithm(Estimator):
     Parameters remain fixed.
     """
 
-    def _exportable_vars(self) -> list[ExposrtableVars]:
+    def _exportable_vars(self) -> list[ExportableVars]:
         return (
-            ExposrtableVars("xPold", self.Nx, "xP_all", True),
-            ExposrtableVars("pPold", self.Np, "pP_all", True),
-            ExposrtableVars("Lxold", self.Nx, "Lx_all", True),
+            ExportableVars("xPold", self.Nx, "xP_all", True),
+            ExportableVars("pPold", self.Np, "pP_all", True),
+            ExportableVars("Lxold", self.Nx, "Lx_all", True),
         )
 
     def initialize(self, x0: Any, p0: Any, uold: Any, yXPold: Any, told: float) -> None:
