@@ -85,8 +85,7 @@ class Estimator(ABC):
 
     def _exportable_vars(self) -> list[ExportableVars]:
         """Build export metadata after model-dependent dimensions are known."""
-
-        return ()
+        return []
 
     @property
     def exportable_variables(self) -> list[ExportableVars]:
