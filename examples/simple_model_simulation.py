@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from beast.cell_models.r0r1c1 import CellModel_R0R1C1
+from beast.cell_models.r0r1c1 import R0R1C1
 from beast.simulation import simulate_model
 
 
@@ -33,7 +33,7 @@ def main() -> None:
         "spR": np.diag([1.0e-10, 1.0e-10, 1.0e-6]),
         "spE": np.diag([1.0e-5]),
     }
-    model = CellModel_R0R1C1(model_data, covariance, delta_t)
+    model = R0R1C1(model_data, covariance, delta_t)
 
     time = np.arange(300.0)
     current = np.zeros((1, time.size), dtype=np.float64)

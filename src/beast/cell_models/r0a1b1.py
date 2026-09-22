@@ -1,4 +1,4 @@
-"""Discrete first-order equivalent-circuit model ``CellModel_R0A1B1``."""
+"""Discrete first-order equivalent-circuit model ``R0A1B1``."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 
-class CellModel_R0A1B1(CellModel):
+class R0A1B1(CellModel):
     """One-RC-branch model parameterized directly by ``A1`` and ``B1``.
 
     ``x = [SOC, vC1]`` and ``p = [R0, A1, B1]``.  The MATLAB conversion

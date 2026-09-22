@@ -4,12 +4,12 @@ import numpy as np
 import pytest
 
 from beast.cell_models import (
-    CellModel_H0F0A,
-    CellModel_R0A1B1,
-    CellModel_R0R1A1R2A2,
-    CellModel_R0R1C1,
-    CellModel_R0R1C1R2C2,
-    CellModel_R0R1T1,
+    H0F0A,
+    R0A1B1,
+    R0R1A1R2A2,
+    R0R1C1,
+    R0R1C1R2C2,
+    R0R1T1,
 )
 from conftest import covariance_for
 
@@ -26,20 +26,20 @@ def _finite_difference(function, value, epsilon=1.0e-6):
 
 
 CASES = [
-    (CellModel_H0F0A, np.array([0.7]), np.array([0.01])),
-    (CellModel_R0A1B1, np.array([0.7, -0.02]), np.array([0.01, 0.95, -0.001])),
+    (H0F0A, np.array([0.7]), np.array([0.01])),
+    (R0A1B1, np.array([0.7, -0.02]), np.array([0.01, 0.95, -0.001])),
     (
-        CellModel_R0R1A1R2A2,
+        R0R1A1R2A2,
         np.array([0.7, -0.02, -0.01]),
         np.array([0.01, 0.02, 0.95, 0.03, 0.9]),
     ),
-    (CellModel_R0R1C1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 1000.0])),
+    (R0R1C1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 1000.0])),
     (
-        CellModel_R0R1C1R2C2,
+        R0R1C1R2C2,
         np.array([0.7, -0.02, -0.01]),
         np.array([0.01, 0.02, 1000.0, 0.03, 2000.0]),
     ),
-    (CellModel_R0R1T1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 20.0])),
+    (R0R1T1, np.array([0.7, -0.02]), np.array([0.01, 0.02, 20.0])),
 ]
 
 @pytest.mark.parametrize("model_class,x,p", CASES)
@@ -77,5 +77,5 @@ def test_cellmodels_soc_is_clipped(model_class, x, p):
 
 def test_cellmodels_parameter_coercion():
     with pytest.warns(RuntimeWarning):
-        corrected = CellModel_R0R1T1.coerce_parameters([-1.0, -2.0, -3.0])
+        corrected = R0R1T1.coerce_parameters([-1.0, -2.0, -3.0])
     assert np.all(corrected > 0.0)

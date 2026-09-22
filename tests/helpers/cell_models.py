@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 from beast.cell_models.base import CellModel
 
-class CellModel_Dummy(CellModel):
+class Dummy(CellModel):
 
     def __init__(self):
         self.Nx = 2

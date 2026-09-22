@@ -1,4 +1,4 @@
-"""Zero-dynamic-branch battery model ``CellModel_H0F0A``."""
+"""Zero-dynamic-branch battery model ``H0F0A``."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 
-class CellModel_H0F0A(CellModel):
+class H0F0A(CellModel):
     """Coulomb-counting state model with one ohmic-resistance parameter.
 
     State vector:

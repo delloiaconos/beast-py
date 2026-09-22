@@ -7,7 +7,7 @@ import pytest
 from beast.estimators.base import Estimator
 from beast.estimators.factory import createEstimator, selectEstimator, ESTIMATOR_REGISTRY
 
-from tests.helpers.cell_models import CellModel_Dummy
+from tests.helpers.cell_models import Dummy
 
 def _mixed_case(value: str) -> str:
     return "".join(
@@ -63,14 +63,14 @@ def test_estimator_factory_create_has_actionable_error():
 
 def test_estimator_factory_create_rejects_zero_delta_t():
     with pytest.raises(ValueError):
-        createEstimator(" EKFDUAL ", cell_model=CellModel_Dummy(), delta_t=0.0)
+        createEstimator(" EKFDUAL ", cell_model=Dummy(), delta_t=0.0)
 
 
 def test_estimator_factory_create_rejects_nan_delta_t():
     with pytest.raises(ValueError):
-        createEstimator(" EKFDUAL ", cell_model=CellModel_Dummy(), delta_t=float("nan"))
+        createEstimator(" EKFDUAL ", cell_model=Dummy(), delta_t=float("nan"))
 
 
 def test_estimator_factory_create_rejects_infinite_delta_t():
     with pytest.raises(ValueError):
-        createEstimator(" EKFDUAL ", cell_model=CellModel_Dummy(), delta_t=float("inf"))
+        createEstimator(" EKFDUAL ", cell_model=Dummy(), delta_t=float("inf"))

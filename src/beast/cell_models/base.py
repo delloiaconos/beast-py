@@ -88,9 +88,9 @@ class CellModel(ABC):
 
     @property
     def name(self) -> str:
-        """Model selector without the ``CellModel_`` prefix."""
+        """Model selector without the ```` prefix."""
 
-        return type(self).__name__.removeprefix("CellModel_")
+        return type(self).__name__.removeprefix("")
 
     def state(self, value: Any) -> FloatArray:
         vector = as_float_vector(value, name="state")

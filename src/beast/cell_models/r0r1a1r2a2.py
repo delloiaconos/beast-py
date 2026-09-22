@@ -11,7 +11,7 @@ from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 
-class CellModel_R0R1A1R2A2(CellModel):
+class R0R1A1R2A2(CellModel):
     """Two-branch model parameterized by discrete decay coefficients.
 
     The state is ``[SOC, v1, v2]`` and the parameter vector is

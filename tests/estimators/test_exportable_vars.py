@@ -7,10 +7,10 @@ from dataclasses import FrozenInstanceError
 import numpy as np
 import pytest
 
-from beast.cell_models import CellModel_R0R1C1
+from beast.cell_models import R0R1C1
 from beast.estimators import ExposrtableVars, createEstimator
 from conftest import covariance_for
-from tests.helpers.cell_models import CellModel_Dummy
+from tests.helpers.cell_models import Dummy
 
 
 @pytest.mark.parametrize(
@@ -54,7 +54,7 @@ from tests.helpers.cell_models import CellModel_Dummy
     ],
 )
 def test_exportable_vars_match_matlab_schema(selector, expected) -> None:
-    estimator = createEstimator(selector, CellModel_Dummy(), 0.1)
+    estimator = createEstimator(selector, Dummy(), 0.1)
 
     assert not hasattr(estimator, "AvailablesVars")
     assert estimator.exportable_variables == estimator.ExportableVars
@@ -84,7 +84,7 @@ def test_exportable_vars_match_matlab_schema(selector, expected) -> None:
 
 
 def test_export_handlers_produce_declared_sizes() -> None:
-    estimator = createEstimator("EKFDUAL", CellModel_Dummy(), 0.1)
+    estimator = createEstimator("EKFDUAL", Dummy(), 0.1)
     values = {
         "sxPold": np.eye(estimator.Nx),
         "spPold": np.eye(estimator.Np),
@@ -103,9 +103,9 @@ def test_export_handlers_produce_declared_sizes() -> None:
     ["OPENLOOP", "MIXALGORITHM", "ENHANCEDMIXALGORITHM", "EKFDUAL"],
 )
 def test_exportable_members_exist_after_initialization(selector, model_data) -> None:
-    model = CellModel_R0R1C1(
+    model = R0R1C1(
         model_data,
-        covariance_for(CellModel_R0R1C1),
+        covariance_for(R0R1C1),
         1.0,
     )
     estimator = createEstimator(selector, model, 1.0)

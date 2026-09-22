@@ -11,7 +11,7 @@ from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 
-class CellModel_R0R1C1R2C2(CellModel):
+class R0R1C1R2C2(CellModel):
     """Two-RC-branch model with state ``[SOC, vC1, vC2]``.
 
     Parameters are ``[R0, R1, C1, R2, C2]``.  Terminal voltage is the OCV

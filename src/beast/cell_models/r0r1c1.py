@@ -11,7 +11,7 @@ from beast.cell_models.base import CellModel
 from beast.core.arrays import FloatArray, as_float_vector
 
 
-class CellModel_R0R1C1(CellModel):
+class R0R1C1(CellModel):
     """One-RC-branch model with physical parameters ``R0``, ``R1``, ``C1``.
 
     State vector is ``[SOC, vC1]`` and parameter vector is

@@ -5,14 +5,14 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from beast.cell_models import CellModel_R0R1A1R2A2
+from beast.cell_models import R0R1A1R2A2
 from conftest import covariance_for
 
 
 def test_r0r1a1r2a2_equations_match_matlab_reference(model_data):
-    model = CellModel_R0R1A1R2A2(
+    model = R0R1A1R2A2(
         model_data,
-        covariance_for(CellModel_R0R1A1R2A2),
+        covariance_for(R0R1A1R2A2),
         1.0,
     )
     x = np.array([0.8, -0.1, -0.2])
@@ -34,7 +34,7 @@ def test_r0r1a1r2a2_equations_match_matlab_reference(model_data):
 
 def test_r0r1a1r2a2_parameter_coercion_matches_matlab_bounds():
     with pytest.warns(RuntimeWarning):
-        corrected = CellModel_R0R1A1R2A2.coerce_parameters(
+        corrected = R0R1A1R2A2.coerce_parameters(
             [-1.0, 0.0, 0.0, -2.0, 1.0]
         )
 
@@ -42,11 +42,11 @@ def test_r0r1a1r2a2_parameter_coercion_matches_matlab_bounds():
         corrected,
         np.array(
             [
-                CellModel_R0R1A1R2A2.zerohere,
-                CellModel_R0R1A1R2A2.zerohere,
-                CellModel_R0R1A1R2A2.zerohere,
-                CellModel_R0R1A1R2A2.zerohere,
-                1.0 - CellModel_R0R1A1R2A2.zerohere,
+                R0R1A1R2A2.zerohere,
+                R0R1A1R2A2.zerohere,
+                R0R1A1R2A2.zerohere,
+                R0R1A1R2A2.zerohere,
+                1.0 - R0R1A1R2A2.zerohere,
             ]
         ),
     )
@@ -54,4 +54,4 @@ def test_r0r1a1r2a2_parameter_coercion_matches_matlab_bounds():
 
 def test_r0r1a1r2a2_rejects_wrong_parameter_dimension():
     with pytest.raises(ValueError, match="parameters must have length 5"):
-        CellModel_R0R1A1R2A2.coerce_parameters([0.01, 0.02, 0.9])
+        R0R1A1R2A2.coerce_parameters([0.01, 0.02, 0.9])
